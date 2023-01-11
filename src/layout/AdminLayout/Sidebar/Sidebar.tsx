@@ -8,7 +8,7 @@ import { Text, Flex } from '@chakra-ui/react'
 
 export default function Sidebar(props: { isShow: boolean; isShowMd: boolean }) {
   const { isShow, isShowMd } = props
-  const [isNarrow, setIsNarrow] = useState(false)
+  const [isNarrow, setIsNarrow] = useState(true)
 
   const toggleIsNarrow = () => {
     const newValue = !isNarrow
@@ -45,14 +45,14 @@ export default function Sidebar(props: { isShow: boolean; isShowMd: boolean }) {
           {/* <use xlinkHref="/assets/brand/coreui.svg#full" />
           <Text as="span">Dashboard</Text>
         </svg> */}
-        <svg
+        {/* <svg
           className="sidebar-brand-narrow d-none"
           width="46"
           height="46"
         >
           <title>CoreUI Logo</title>
           <use xlinkHref="/assets/brand/coreui.svg#signet" />
-        </svg>
+        </svg> */}
       </div>
 
       <div className="sidebar-nav flex-fill">

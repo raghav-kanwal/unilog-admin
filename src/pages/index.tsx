@@ -651,7 +651,7 @@ const Home: NextPage = () => (
           <Card.Header>
             Shipment Tracking History
           </Card.Header>
-          <Card.Body>
+          <Card.Body className="px-0 py-0">
             <Table />
           </Card.Body>
         </Card>

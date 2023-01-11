@@ -28,7 +28,6 @@ import {
 } from 'react-bootstrap'
 import classNames from 'classnames'
 import Link from 'next/link'
-import { MdDashboardCustomize } from 'react-icons/fa'
 
 type SidebarNavItemProps = {
   href: string;

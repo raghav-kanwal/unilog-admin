@@ -12,8 +12,7 @@ export default function Table() {
     }
 
     const data = Array(1000).fill([
-        '3108518186',
-        'ECOM',
+        'AWB: 3108518186, Courier: ECOM',
         '4695400513715',
         'Raghav, 8171505570',
         'SP-BHI-FY23-175840',
@@ -27,8 +26,7 @@ export default function Table() {
     ]);
 
     const columns = [
-        'AWB',
-        'Courier',
+        'Shipping Provider',
         'Sale Order',
         'Customer',
         'Shipping Package',
@@ -47,15 +45,15 @@ export default function Table() {
     const rowVirtualizer = useVirtualizer({
         count: data.length,
         getScrollElement: () => parentRef.current,
-        estimateSize: () => 80,
+        estimateSize: () => 65,
         overscan: 5,
     })
 
     const columnVirtualizer = useVirtualizer({
         horizontal: true,
-        count: 13,
+        count: 12,
         getScrollElement: () => parentRef.current,
-        estimateSize: () => 120,
+        estimateSize: () => 110,
         overscan: 5,
     })
 
@@ -66,9 +64,9 @@ export default function Table() {
                 ref={parentRef}
                 className="List"
                 style={{
-                    height: `700px`,
+                    height: `500px`,
                     width: `100%`,
-                    overflow: 'auto',
+                    overflow: 'auto'
                 }}
             >
                 <div
@@ -87,18 +85,23 @@ export default function Table() {
                                         position: 'absolute',
                                         top: 0,
                                         left: 0,
-                                        width: `120px`,
-                                        height: `80px`,
+                                        width: `110px`,
+                                        height: `65px`,
+                                        padding: `0.5rem`,
                                         fontWeight: virtualRow.index === 0 ? 'bold' : 'normal',
-                                        transform: `translateX(${virtualColumn.start + virtualColumn.index * 20}px) translateY(${virtualRow.start}px)`,
+                                        borderRight: `1px solid #ececec`,
+                                        borderBottom: `1px solid #ececec`,
+                                        fontSize: virtualRow.index === 0 ? '0.875rem' : '0.75rem',
+                                        textAlign: virtualColumn.index === 10 ? 'right' : 'left',
+                                        transform: `translateX(${virtualColumn.start}px) translateY(${virtualRow.start}px)`,
                                     }}
                                 >
                                     {
                                         virtualRow.index === 0
                                             ? columns[virtualColumn.index]
-                                            : virtualColumn.index !== 12
+                                            : virtualColumn.index !== 11
                                                 ? data[virtualRow.index][virtualColumn.index]
-                                                : <Button onClick={() => showShipmentDetails(virtualRow.index)}>Show</Button>
+                                                : <Button fontSize="xs" p={2} py={2} h={`28px`} onClick={() => showShipmentDetails(virtualRow.index)}>Show</Button>
                                     }
                                 </div>
                             ))}
