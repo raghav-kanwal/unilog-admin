@@ -37,8 +37,8 @@ export default function Sidebar(props: { isShow: boolean; isShowMd: boolean }) {
           width="118"
           height="46"
         >
-          <title>CoreUI Logo</title>
-          <use xlinkHref="/assets/brand/coreui.svg#full" />
+          <title></title>
+          {/* <use xlinkHref="/assets/brand/coreui.svg#full" /> */}
         </svg>
         <svg
           className="sidebar-brand-narrow d-none"

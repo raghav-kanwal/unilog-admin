@@ -4,8 +4,10 @@ $avatar-status-width: 0.6666666667rem;
 $avatar-status-height: 0.6666666667rem;
 
 .avatar {
-  width: $avatar-width;
   height: $avatar-height;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   .avatar-status {
     width: $avatar-status-width;

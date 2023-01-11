@@ -17,6 +17,8 @@ import {
   faGear, faListCheck, faLock, faPowerOff,
 } from '@fortawesome/free-solid-svg-icons'
 import Link from 'next/link'
+import { Avatar } from '@chakra-ui/react'
+import { FaUserAlt } from 'react-icons/fa';
 
 type NavItemProps = {
   icon: IconDefinition;
@@ -39,12 +41,7 @@ export default function HeaderProfileNav() {
       <Dropdown as={NavItem}>
         <Dropdown.Toggle variant="link" bsPrefix="shadow-none" className="py-0 px-2 rounded-0" id="dropdown-profile">
           <div className="avatar position-relative">
-            <Image
-              fill
-              className="rounded-circle"
-              src="/assets/img/avatars/8.jpg"
-              alt="user@email.com"
-            />
+            <Avatar icon={<FaUserAlt fontSize="20px"/> }/>
           </div>
         </Dropdown.Toggle>
         <Dropdown.Menu className="pt-0">
