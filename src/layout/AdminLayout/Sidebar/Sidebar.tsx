@@ -37,7 +37,7 @@ export default function Sidebar(props: { isShow: boolean; isShowMd: boolean }) {
           width="118"
           height="46"
         >
-          <title></title>
+          <title>Dashboard</title>
           {/* <use xlinkHref="/assets/brand/coreui.svg#full" /> */}
         </svg>
         <svg

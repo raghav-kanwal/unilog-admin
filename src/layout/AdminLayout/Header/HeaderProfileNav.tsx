@@ -1,7 +1,6 @@
 import {
   Badge, Dropdown, Nav, NavItem,
 } from 'react-bootstrap'
-import Image from 'next/image'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faBell,
@@ -18,7 +17,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import Link from 'next/link'
 import { Avatar } from '@chakra-ui/react'
-import { FaUserAlt } from 'react-icons/fa';
+import { FaUserAlt } from 'react-icons/fa'
 
 type NavItemProps = {
   icon: IconDefinition;
@@ -41,7 +40,7 @@ export default function HeaderProfileNav() {
       <Dropdown as={NavItem}>
         <Dropdown.Toggle variant="link" bsPrefix="shadow-none" className="py-0 px-2 rounded-0" id="dropdown-profile">
           <div className="avatar position-relative">
-            <Avatar icon={<FaUserAlt fontSize="20px"/> }/>
+            <Avatar icon={<FaUserAlt fontSize="20px" />} />
           </div>
         </Dropdown.Toggle>
         <Dropdown.Menu className="pt-0">
