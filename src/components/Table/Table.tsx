@@ -1,11 +1,12 @@
-import { Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Input, useDisclosure } from "@chakra-ui/react";
+import { Text, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Input, useDisclosure } from "@chakra-ui/react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { Fragment, useEffect, useRef, useState } from "react"
 
 export default function Table() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [shippingList, setShippingList] = useState<any[]>([]);
-    const [shipmentDetailIndex, setShipmentDetailIndex] = useState<number>(0);
+    const [shipmentDetails, setShipmentDetails] = useState<any>()
+    const [shipmentDetailIndex, setShipmentDetailIndex] = useState<number>(-1);
 
     useEffect(() => {
         async function fetchShipmentList() {
@@ -44,6 +45,28 @@ export default function Table() {
         fetchShipmentList();
     }, [])
 
+    useEffect(() => {
+        async function fetchShipmentDetails() {
+            try {
+                const res = await fetch(`https://qa-unishipper.unicommerce.com/shipper/api/tracking-details?tr_number=${shippingList[shipmentDetailIndex][0].split(",")[0].split(": ")[1]}`, {
+                    method: "GET",
+                    headers: {
+                        'APP-KEY': '#$%^SK&SNLSH*^%SF'
+                    }
+                })
+
+                if (!res.ok) throw new Error(res.statusText);
+
+                const data = await res.json();
+                setShipmentDetails(data.result);
+            } catch (err) {
+                console.log(err)
+            }
+        }
+
+        if (shipmentDetailIndex != -1) fetchShipmentDetails();
+    }, [shipmentDetailIndex])
+
     const showShipmentDetails = (index: number) => {
         setShipmentDetailIndex(index);
         onOpen();
@@ -67,7 +90,7 @@ export default function Table() {
     const parentRef = useRef(null)
 
     const rowVirtualizer = useVirtualizer({
-        count: shippingList.length,
+        count: shippingList.length + 1,
         getScrollElement: () => parentRef.current,
         estimateSize: () => 80,
         overscan: 5,
@@ -124,8 +147,8 @@ export default function Table() {
                                         virtualRow.index === 0
                                             ? columns[virtualColumn.index]
                                             : virtualColumn.index !== 11
-                                                ? shippingList[virtualRow.index][virtualColumn.index]
-                                                : <Button fontSize="xs" p={2} py={2} h={`28px`} onClick={() => showShipmentDetails(virtualRow.index)}>Show</Button>
+                                                ? shippingList[virtualRow.index - 1][virtualColumn.index]
+                                                : <Button fontSize="xs" p={2} py={2} h={`28px`} onClick={() => showShipmentDetails(virtualRow.index - 1)}>Show</Button>
                                     }
                                 </div>
                             ))}
@@ -146,7 +169,7 @@ export default function Table() {
                     <DrawerHeader>Shipment Details</DrawerHeader>
 
                     <DrawerBody>
-                        Shipment Details for index {shipmentDetailIndex}
+                        <Text>{JSON.stringify(shipmentDetails)}</Text>
                     </DrawerBody>
 
                     <DrawerFooter>
