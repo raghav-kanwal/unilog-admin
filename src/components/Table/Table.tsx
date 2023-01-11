@@ -1,9 +1,15 @@
 import { Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Input, useDisclosure } from "@chakra-ui/react";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import { Fragment, useRef } from "react"
+import { Fragment, useRef, useState } from "react"
 
 export default function Table() {
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const [shipmentDetailIndex, setShipmentDetailIndex] = useState<number>(0);
+
+    const showShipmentDetails = (index: number) => {
+        setShipmentDetailIndex(index);
+        onOpen();
+    }
 
     const data = Array(1000).fill([
         '3108518186',
@@ -51,6 +57,7 @@ export default function Table() {
         overscan: 5,
     })
 
+
     return (
         <>
             <div
@@ -89,7 +96,7 @@ export default function Table() {
                                             ? columns[virtualColumn.index]
                                             : virtualColumn.index !== 11
                                                 ? data[virtualRow.index][virtualColumn.index]
-                                                : <button>Show</button>
+                                                : <Button onClick={() => showShipmentDetails(virtualRow.index)}>Show</Button>
                                     }
                                 </div>
                             ))}
@@ -110,7 +117,7 @@ export default function Table() {
                     <DrawerHeader>Shipment Details</DrawerHeader>
 
                     <DrawerBody>
-                        Shipment Details for index 0
+                        Shipment Details for index {shipmentDetailIndex}
                     </DrawerBody>
 
                     <DrawerFooter>
