@@ -1,4 +1,4 @@
-import { Text, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Input, useDisclosure } from "@chakra-ui/react";
+import { Text, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Input, useDisclosure, Box } from "@chakra-ui/react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { Fragment, useEffect, useRef, useState } from "react"
 
@@ -24,17 +24,24 @@ export default function Table() {
                 const data = await res.json();
                 setShippingList(data.result.tracking_records.map((row: any) => {
                     return [
-                        `AWB: ${row.tracking_number}, Courier: ${row.shipping_source_code}`,
+                        <Box>
+                            <Text>AWB: {row.tracking_number}</Text>
+                            <Text>Courier: {row.shipping_source_code}</Text>
+                        </Box>,
                         `${row.order_number}`,
-                        `${row.customer_name}, ${row.customer_phone}`,
+                        <Box>
+                            <Text>{row.customer_name}</Text>
+                            <Text>{row.customer_phone}</Text>
+                        </Box>,
                         `${row.shipping_package_code}`,
                         `${row.facility_code}`,
                         `${row.current_wismo_display_status}`,
-                        `${row.order_datetime}`,
-                        `${row.dispatch_datetime}`,
-                        `${row.expected_delivered_datetime}`,
-                        `${row.delivered_datetime}`,
+                        <Text>{parseDate(row.order_datetime)}</Text>,
+                        <Text>{parseDate(row.dispatch_datetime)}</Text>,
+                        <Text>{parseDate(row.expected_delivered_datetime)}</Text>,
+                        <Text>{parseDate(row.delivered_datetime)}</Text>,
                         `${row.no_of_items}`,
+                        `${row.tracking_number}`
                     ]
                 }))
             } catch (err) {
@@ -48,7 +55,7 @@ export default function Table() {
     useEffect(() => {
         async function fetchShipmentDetails() {
             try {
-                const res = await fetch(`https://qa-unishipper.unicommerce.com/shipper/api/tracking-details?tr_number=${shippingList[shipmentDetailIndex][0].split(",")[0].split(": ")[1]}`, {
+                const res = await fetch(`https://qa-unishipper.unicommerce.com/shipper/api/tracking-details?tr_number=${shippingList[shipmentDetailIndex][shippingList[shipmentDetailIndex].length - 1]}`, {
                     method: "GET",
                     headers: {
                         'APP-KEY': '#$%^SK&SNLSH*^%SF'
@@ -72,19 +79,26 @@ export default function Table() {
         onOpen();
     }
 
+    const parseDate = (oldDate: string): string => (new Date(oldDate).toLocaleDateString("en-IN", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric"
+        }));
+
     const columns = [
-        'Shipping Provider',
-        'Sale Order',
-        'Customer',
-        'Shipping Package',
-        'Facility',
-        'Tracking Status',
-        'Order Date',
-        'Dispatch Date',
-        'Expected Delivery Date',
-        'Delivery Date',
-        'No of Attempts',
-        'View Details',
+        { name: 'Shipping Provider', width: 140},
+        { name: 'Sale Order', width: 120},
+        { name: 'Customer', width: 130},
+        { name: 'Shipping Package', width: 110},
+        { name: 'Facility', width: 90},
+        { name: 'Tracking Status', width: 110},
+        { name: 'Order Date', width: 110},
+        { name: 'Dispatch Date', width: 110},
+        { name: 'Expected Delivery Date', width: 110},
+        { name: 'Delivery Date', width: 110},
+        { name: 'No of Attempts', width: 85},
+        { name: 'Action', width: 80},
     ];
 
     const parentRef = useRef(null)
@@ -94,13 +108,13 @@ export default function Table() {
         getScrollElement: () => parentRef.current,
         estimateSize: () => 80,
         overscan: 5,
-    })
+    });
 
     const columnVirtualizer = useVirtualizer({
         horizontal: true,
         count: 12,
         getScrollElement: () => parentRef.current,
-        estimateSize: () => 110,
+        estimateSize: (i) => columns[i]['width'],
         overscan: 5,
     })
 
@@ -132,20 +146,21 @@ export default function Table() {
                                         position: 'absolute',
                                         top: 0,
                                         left: 0,
-                                        width: `110px`,
+                                        width: columns[virtualColumn.index]['width'],
                                         height: `80px`,
                                         padding: `0.5rem`,
                                         fontWeight: virtualRow.index === 0 ? 'bold' : 'normal',
                                         borderRight: `1px solid #ececec`,
                                         borderBottom: `1px solid #ececec`,
                                         fontSize: virtualRow.index === 0 ? '0.875rem' : '0.75rem',
+                                        // width: virtualColumn.index === 10 ? '50px' : '110px',
                                         textAlign: virtualColumn.index === 10 ? 'right' : 'left',
                                         transform: `translateX(${virtualColumn.start}px) translateY(${virtualRow.start}px)`,
                                     }}
                                 >
                                     {
                                         virtualRow.index === 0
-                                            ? columns[virtualColumn.index]
+                                            ? columns[virtualColumn.index]['name']
                                             : virtualColumn.index !== 11
                                                 ? shippingList[virtualRow.index - 1][virtualColumn.index]
                                                 : <Button fontSize="xs" p={2} py={2} h={`28px`} onClick={() => showShipmentDetails(virtualRow.index - 1)}>Show</Button>
