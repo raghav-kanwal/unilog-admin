@@ -64,7 +64,7 @@ export default function Table() {
                 ref={parentRef}
                 className="List"
                 style={{
-                    height: `500px`,
+                    height: `535px`,
                     width: `100%`,
                     overflow: 'auto'
                 }}
