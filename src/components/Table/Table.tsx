@@ -15,6 +15,7 @@ export default function Table() {
         '3108518186',
         'ECOM',
         '4695400513715',
+        'Raghav, 8171505570',
         'SP-BHI-FY23-175840',
         'ARIHANT',
         'Delivered',
@@ -22,13 +23,14 @@ export default function Table() {
         'Jan. 8, 2023, 9:52 p.m.',
         'Jan. 13, 2023, 6 p.m.',
         'Jan. 11, 2023, 1:12 p.m.',
-        '2'
+        '2',
     ]);
 
     const columns = [
         'AWB',
         'Courier',
         'Sale Order',
+        'Customer',
         'Shipping Package',
         'Facility',
         'Tracking Status',
@@ -51,7 +53,7 @@ export default function Table() {
 
     const columnVirtualizer = useVirtualizer({
         horizontal: true,
-        count: 12,
+        count: 13,
         getScrollElement: () => parentRef.current,
         estimateSize: () => 120,
         overscan: 5,
@@ -94,7 +96,7 @@ export default function Table() {
                                     {
                                         virtualRow.index === 0
                                             ? columns[virtualColumn.index]
-                                            : virtualColumn.index !== 11
+                                            : virtualColumn.index !== 12
                                                 ? data[virtualRow.index][virtualColumn.index]
                                                 : <Button onClick={() => showShipmentDetails(virtualRow.index)}>Show</Button>
                                     }
@@ -109,10 +111,10 @@ export default function Table() {
                 isOpen={isOpen}
                 placement='right'
                 onClose={onClose}
-                size='full'
+                size='xl'
             >
                 <DrawerOverlay />
-                <DrawerContent>
+                <DrawerContent transform="none !important">
                     <DrawerCloseButton />
                     <DrawerHeader>Shipment Details</DrawerHeader>
 
