@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import classNames from 'classnames'
 import { Button } from 'react-bootstrap'
 import SidebarNav from './SidebarNav'
+import { Text, Flex } from '@chakra-ui/react'
 
 export default function Sidebar(props: { isShow: boolean; isShowMd: boolean }) {
   const { isShow, isShowMd } = props
@@ -32,14 +33,18 @@ export default function Sidebar(props: { isShow: boolean; isShowMd: boolean }) {
       id="sidebar"
     >
       <div className="sidebar-brand d-none d-md-flex align-items-center justify-content-center">
-        <svg
+        <Flex align="center">
+          <Text textAlign={'center'} m={0}>UniLog</Text>
+        </Flex>
+        {/* <svg
           className="sidebar-brand-full"
           width="118"
           height="46"
         >
           <title>Dashboard</title>
-          {/* <use xlinkHref="/assets/brand/coreui.svg#full" /> */}
-        </svg>
+          {/* <use xlinkHref="/assets/brand/coreui.svg#full" />
+          <Text as="span">Dashboard</Text>
+        </svg> */}
         <svg
           className="sidebar-brand-narrow d-none"
           width="46"
