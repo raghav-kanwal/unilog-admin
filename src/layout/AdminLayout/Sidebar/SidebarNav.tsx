@@ -162,7 +162,7 @@ export default function SidebarNav() {
       </SidebarNavGroup>
 
       <SidebarNavGroup toggleIcon={faLocationArrow} toggleText="Tracking">
-        <SidebarNavItem href="buttons/buttons.html">Orders</SidebarNavItem>
+        <SidebarNavItem href="shipping_history/view">Orders</SidebarNavItem>
         <SidebarNavItem href="buttons/button-group.html">Status Update Manual</SidebarNavItem>
         {/* <SidebarNavItem href="buttons/dropdowns.html">Dropdowns</SidebarNavItem> */}
       </SidebarNavGroup>
