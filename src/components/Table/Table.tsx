@@ -26,7 +26,7 @@ export default function TableComponent({ searchQuery }: SearchQueryProps) {
         async function fetchShipmentDetails() {
             try {
                 const trackingId = shippingList[shipmentDetailIndex][shippingList[shipmentDetailIndex].length - 1];
-                const res = await fetch(API_HOST + "/shipper/api/tracking-details?tr_number=${trackingId}", {
+                const res = await fetch(API_HOST + "/shipper/api/tracking-details?tr_number=" + trackingId, {
                 //const res = await fetch(`https://qa-unishipper.unicommerce.com/shipper/api/tracking-details?tr_number=${trackingId}`, {
                     method: "GET",
                     headers: {
