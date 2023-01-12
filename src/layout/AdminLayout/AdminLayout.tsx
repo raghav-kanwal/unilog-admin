@@ -13,7 +13,7 @@ export default function AdminLayout({ children }: PropsWithChildren) {
   const [isShowSidebar, setIsShowSidebar] = useState(false)
 
   // Show status for md screen and above
-  const [isShowSidebarMd, setIsShowSidebarMd] = useState(true)
+  const [isShowSidebarMd, setIsShowSidebarMd] = useState(false)
 
   const toggleIsShowSidebar = () => {
     setIsShowSidebar(!isShowSidebar)

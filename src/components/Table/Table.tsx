@@ -1,8 +1,8 @@
-import { Text, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Input, useDisclosure, Box } from "@chakra-ui/react";
+import { Text, Center, Spinner, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Input, useDisclosure, Box, Flex, Divider, Table, Td, Tr, TableCaption, TableContainer, Tbody, Th, Thead } from "@chakra-ui/react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { Fragment, useEffect, useRef, useState } from "react"
 
-export default function Table() {
+export default function TableComponent() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [shippingList, setShippingList] = useState<any[]>([]);
     const [shipmentDetails, setShipmentDetails] = useState<any>()
@@ -16,7 +16,7 @@ export default function Table() {
                     headers: {
                         'APP-KEY': '#$%^SK&SNLSH*^%SF'
                     },
-                    body: JSON.stringify({})
+                    body: JSON.stringify({ "search_text": "" })
                 });
 
                 if (!res.ok) throw new Error(res.statusText);
@@ -65,7 +65,7 @@ export default function Table() {
                 if (!res.ok) throw new Error(res.statusText);
 
                 const data = await res.json();
-                setShipmentDetails(data.result);
+                setShipmentDetails(data.result.tracking_details);
             } catch (err) {
                 console.log(err)
             }
@@ -79,26 +79,32 @@ export default function Table() {
         onOpen();
     }
 
-    const parseDate = (oldDate: string): string => (new Date(oldDate).toLocaleDateString("en-IN", {
-            weekday: "long",
-            year: "numeric",
-            month: "long",
-            day: "numeric"
-        }));
+    const handleOnClose = () => {
+        setShipmentDetailIndex(-1);
+        setShipmentDetails(null)
+        onClose();
+    }
+
+    const parseDate = (oldDate: string): string => !oldDate ? "-" : (new Date(oldDate).toLocaleDateString("en-IN", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+    }));
 
     const columns = [
-        { name: 'Shipping Provider', width: 140},
-        { name: 'Sale Order', width: 120},
-        { name: 'Customer', width: 130},
-        { name: 'Shipping Package', width: 110},
-        { name: 'Facility', width: 90},
-        { name: 'Tracking Status', width: 110},
-        { name: 'Order Date', width: 110},
-        { name: 'Dispatch Date', width: 110},
-        { name: 'Expected Delivery Date', width: 110},
-        { name: 'Delivery Date', width: 110},
-        { name: 'No of Attempts', width: 85},
-        { name: 'Action', width: 80},
+        { name: 'Shipping Provider', width: 150 },
+        { name: 'Sale Order', width: 120 },
+        { name: 'Customer', width: 135 },
+        { name: 'Shipping Package', width: 110 },
+        { name: 'Facility', width: 90 },
+        { name: 'Tracking Status', width: 110 },
+        { name: 'Order Date', width: 110 },
+        { name: 'Dispatch Date', width: 110 },
+        { name: 'Expected Delivery Date', width: 110 },
+        { name: 'Delivery Date', width: 110 },
+        { name: 'No of Attempts', width: 85 },
+        { name: 'Action', width: 80 },
     ];
 
     const parentRef = useRef(null)
@@ -125,7 +131,7 @@ export default function Table() {
                 ref={parentRef}
                 className="List"
                 style={{
-                    height: `535px`,
+                    height: `520px`,
                     width: `100%`,
                     overflow: 'auto'
                 }}
@@ -150,8 +156,8 @@ export default function Table() {
                                         height: `80px`,
                                         padding: `0.5rem`,
                                         fontWeight: virtualRow.index === 0 ? 'bold' : 'normal',
-                                        borderRight: `1px solid #ececec`,
                                         borderBottom: `1px solid #ececec`,
+                                        borderRight: virtualColumn.index !== 11 ? `1px solid #ececec` : 0,
                                         fontSize: virtualRow.index === 0 ? '0.875rem' : '0.75rem',
                                         // width: virtualColumn.index === 10 ? '50px' : '110px',
                                         textAlign: virtualColumn.index === 10 ? 'right' : 'left',
@@ -175,23 +181,232 @@ export default function Table() {
             <Drawer
                 isOpen={isOpen}
                 placement='right'
-                onClose={onClose}
+                onClose={handleOnClose}
                 size='xl'
             >
-                <DrawerOverlay />
+                <DrawerOverlay transform="none !important"/>
                 <DrawerContent transform="none !important">
                     <DrawerCloseButton />
-                    <DrawerHeader>Shipment Details</DrawerHeader>
+                    <DrawerHeader py={2}>Shipment Details</DrawerHeader>
 
                     <DrawerBody>
-                        <Text>{JSON.stringify(shipmentDetails)}</Text>
+                        {!shipmentDetails && <Center h={`100%`}><Spinner/></Center>}
+                        {shipmentDetails && <>
+                            <Text fontSize="md" mb={4}>Basic Information</Text>
+                            <Flex justifyContent="space-between" mb={3}>
+                                <Box className="container" w={`25%`} p={0}>
+                                    <Text className="key" fontSize="xs" color="gray.600">
+                                        Tracking Number
+                                    </Text>
+                                    <Text className="value" fontSize="sm">
+                                        {shipmentDetails.tracking_number || "-"}
+                                    </Text>
+                                </Box>
+                                <Box className="container" w={`25%`} p={0}>
+                                    <Text className="key" fontSize="xs" color="gray.600">
+                                        Sale Order
+                                    </Text>
+                                    <Text className="value" fontSize="sm">
+                                        {shipmentDetails.order_number || "-"}
+                                    </Text>
+                                </Box>
+                                <Box className="container" w={`25%`} p={0}>
+                                    <Text className="key" fontSize="xs" color="gray.600">
+                                        Shipping Package
+                                    </Text>
+                                    <Text className="value" fontSize="sm">
+                                        {shipmentDetails.shipping_package_code || "-"}
+                                    </Text>
+                                </Box>
+                                <Box className="container" w={`25%`} p={0}>
+                                    <Text className="key" fontSize="xs" color="gray.600">
+                                        Tracking Status
+                                    </Text>
+                                    <Text className="value" fontSize="sm">
+                                        {shipmentDetails.current_wismo_display_status || "-"}
+                                    </Text>
+                                </Box>
+                            </Flex>
+
+                            <Flex justifyContent="space-between" mb={3}>
+                                <Box className="container" w={`25%`} p={0}>
+                                    <Text className="key" fontSize="xs" color="gray.600">
+                                    Courier
+                                    </Text>
+                                    <Text className="value" fontSize="sm">
+                                        {shipmentDetails.shipping_source_code || "-"}
+                                    </Text>
+                                </Box>
+                                <Box className="container" w={`25%`} p={0}>
+                                    <Text className="key" fontSize="xs" color="gray.600">
+                                    Shipping Method Type
+                                    </Text>
+                                    <Text className="value" fontSize="sm">
+                                        {shipmentDetails.shipping_type || "-"}
+                                    </Text>
+                                </Box>
+                                <Box className="container" w={`25%`} p={0}>
+                                    <Text className="key" fontSize="xs" color="gray.600">
+                                    Payment Method
+                                    </Text>
+                                    <Text className="value" fontSize="sm">
+                                        {shipmentDetails.payment_method || "-"}
+                                    </Text>
+                                </Box>
+                                <Box className="container" w={`25%`} p={0}>
+                                    <Text className="key" fontSize="xs" color="gray.600">
+                                    Number of Items
+                                    </Text>
+                                    <Text className="value" fontSize="sm">
+                                        {shipmentDetails.no_of_items || "-"}
+                                    </Text>
+                                </Box>
+                            </Flex>
+
+                            <Flex justifyContent="space-between" mb={3}>
+                                <Box className="container" w={`25%`} p={0}>
+                                    <Text className="key" fontSize="xs" color="gray.600">
+                                    Date of Order
+                                    </Text>
+                                    <Text className="value" fontSize="sm">
+                                    {parseDate(shipmentDetails.order_datetime) || "-"}
+                                    </Text>
+                                </Box>
+                                <Box className="container" w={`25%`} p={0}>
+                                    <Text className="key" fontSize="xs" color="gray.600">
+                                    Date of Dispatch
+                                    </Text>
+                                    <Text className="value" fontSize="sm">
+                                    {parseDate(shipmentDetails.dispatch_datetime) || "-"}
+                                    </Text>
+                                </Box>
+                                <Box className="container" w={`25%`} p={0}>
+                                    <Text className="key" fontSize="xs" color="gray.600">
+                                    Date of Expected Delivery
+                                    </Text>
+                                    <Text className="value" fontSize="sm">
+                                    {parseDate(shipmentDetails.expected_delivered_datetime) || "-"}
+                                    </Text>
+                                </Box>
+                                <Box className="container" w={`25%`} p={0}>
+                                    <Text className="key" fontSize="xs" color="gray.600">
+                                    Date of Delivery
+                                    </Text>
+                                    <Text className="value" fontSize="sm">
+                                    {parseDate(shipmentDetails.delivered_datetime) || "-"}
+                                    </Text>
+                                </Box>
+                            </Flex>
+
+                            <Flex justifyContent="space-between" mb={3}>
+                                <Box className="container" w={`25%`} p={0}>
+                                    <Text className="key" fontSize="xs" color="gray.600">
+                                    Shipment Total Cost
+                                    </Text>
+                                    <Text className="value" fontSize="sm">
+                                    {parseDate(shipmentDetails.total_price) || "-"}
+                                    </Text>
+                                </Box>
+                                <Box className="container" w={`25%`} p={0}>
+                                    <Text className="key" fontSize="xs" color="gray.600">
+                                    Customer Name
+                                    </Text>
+                                    <Text className="value" fontSize="sm">
+                                    {shipmentDetails.customer_name || "-"}
+                                    </Text>
+                                </Box>
+                                <Box className="container" w={`25%`} p={0}>
+                                    <Text className="key" fontSize="xs" color="gray.600">
+                                    Customer Phone
+                                    </Text>
+                                    <Text className="value" fontSize="sm">
+                                    {shipmentDetails.customer_phone || "-"}
+                                    </Text>
+                                </Box>
+                                <Box className="container" w={`25%`} p={0}>
+                                    <Text className="key" fontSize="xs" color="gray.600">
+                                    Customer Email
+                                    </Text>
+                                    <Text className="value" fontSize="sm">
+                                    {shipmentDetails.customer_email || "-"}
+                                    </Text>
+                                </Box>
+                            </Flex>
+                            <Flex justifyContent={`flex-start`} mb={4}>
+                            <Box className="container" w={`100%`} p={0}>
+                                    <Text className="key" fontSize="xs" color="gray.600">
+                                    Customer Address
+                                    </Text>
+                                    <Text className="value" fontSize="sm">
+                                    {shipmentDetails.delivery_address || "-"}
+                                    </Text>
+                                </Box>
+                            </Flex>
+                            <Divider mb={4}/>
+                            <Text fontSize="md" mb={4}>Order Items </Text>
+                            <TableContainer>
+                                <Table variant='simple' border={`1px solid var(--chakra-colors-gray-200)`}>
+                                    <Thead>
+                                    <Tr>
+                                        <Th textTransform={`initial`} fontSize="xs" fontWeight="normal" px={2} py={2}>SKU</Th>
+                                        <Th textTransform={`initial`} fontSize="xs" fontWeight="normal" px={2} py={2} borderLeft="1px solid var(--chakra-colors-gray-200)">Channel Product</Th>
+                                        <Th textTransform={`initial`} fontSize="xs" fontWeight="normal" px={2} py={2} borderLeft="1px solid var(--chakra-colors-gray-200)">Total Cost</Th>
+                                    </Tr>
+                                    </Thead>
+                                    <Tbody>
+                                    {
+                                        shipmentDetails && shipmentDetails.line_items && shipmentDetails.line_items.map((item: any, idx: number) => { return <Tr key={idx}>
+                                                <Td px={2} py={2} fontSize="sm">{item.seller_sku_code}</Td>
+                                                <Td px={2} py={2} fontSize="sm" borderLeft="1px solid var(--chakra-colors-gray-200)">{item.seller_sku_code}</Td>
+                                                <Td px={2} py={2} fontSize="sm" borderLeft="1px solid var(--chakra-colors-gray-200)">{item.total_price}</Td>
+                                            </Tr>
+                                        })
+                                    }
+                                    </Tbody>
+                                </Table>
+                            </TableContainer>
+                            
+                            <Divider my={4}/>
+
+                            <Text fontSize="md" mb={4}>Tracking Events</Text>
+                            {/* {shipmentDetails && shipmentDetails.tracking_events && shipmentDetails.tracking_events.map((item: any, idx: number) => {
+                                <Box key={idx}>
+                                    <Text>: {item.tracking_datetime}</Text>
+                                    <Text>: {item.tracking_status}</Text>
+                                    <Text>: {item.tracking_location || "-"}</Text>
+                                </Box>
+                            }) */}
+                            <TableContainer>
+                                <Table variant='simple' border={`1px solid var(--chakra-colors-gray-200)`}>
+                                    <Thead>
+                                    <Tr>
+                                        <Th textTransform={`initial`} fontSize="xs" fontWeight="normal" px={2} py={2}>Date</Th>
+                                        <Th textTransform={`initial`} fontSize="xs" fontWeight="normal" px={2} py={2} borderLeft="1px solid var(--chakra-colors-gray-200)">Status</Th>
+                                        <Th textTransform={`initial`} fontSize="xs" fontWeight="normal" px={2} py={2} borderLeft="1px solid var(--chakra-colors-gray-200)">Location</Th>
+                                    </Tr>
+                                    </Thead>
+                                    <Tbody>
+                                    {
+                                        shipmentDetails && shipmentDetails.tracking_events && shipmentDetails.tracking_events.map((item: any, idx: number) => { return <Tr key={idx}>
+                                                <Td px={2} py={2} fontSize="sm">{item.tracking_datetime || "-"}</Td>
+                                                <Td px={2} py={2} fontSize="sm" borderLeft="1px solid var(--chakra-colors-gray-200)">{item.tracking_status || "-"}</Td>
+                                                <Td px={2} py={2} fontSize="sm" borderLeft="1px solid var(--chakra-colors-gray-200)">{item.tracking_location || "-"}</Td>
+                                            </Tr>
+                                        })
+                                    }
+                                    </Tbody>
+                                </Table>
+                            </TableContainer>
+                        </>}
                     </DrawerBody>
 
-                    <DrawerFooter>
-                        <Button variant='outline' mr={3} onClick={onClose}>
-                            Cancel
-                        </Button>
-                        <Button colorScheme='blue'>Save</Button>
+                    <DrawerFooter justifyContent="flex-start">
+                        <Flex justify="flex-start">
+                            <Button variant='outline' onClick={onClose} size="sm" h={`28px`}>
+                                Close
+                            </Button>
+                        </Flex>
+                        {/* <Button colorScheme='blue' size="sm" h={`28px`}>Close</Button> */}
                     </DrawerFooter>
                 </DrawerContent>
             </Drawer>

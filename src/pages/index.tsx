@@ -37,7 +37,7 @@ import {
   faTwitter,
 } from '@fortawesome/free-brands-svg-icons'
 import React from 'react'
-import Table from 'src/components/Table/Table'
+import TableComponent from 'src/components/Table/Table'
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Tooltip, Filler)
 
@@ -652,7 +652,7 @@ const Home: NextPage = () => (
             Shipment Tracking History
           </Card.Header>
           <Card.Body className="px-0 py-0">
-            <Table />
+            <TableComponent />
           </Card.Body>
         </Card>
       </div>
