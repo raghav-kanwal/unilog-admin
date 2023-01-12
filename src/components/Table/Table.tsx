@@ -377,7 +377,7 @@ export default function TableComponent() {
                                 </Box>
                             }) */}
                             <TableContainer>
-                                <Table variant='simple' border={`1px solid var(--chakra-colors-gray-200)`}>
+                                <Table variant='simple' border={`1px solid var(--chakra-colors-gray-200)`} mb={2}>
                                     <Thead>
                                     <Tr>
                                         <Th textTransform={`initial`} fontSize="xs" fontWeight="normal" px={2} py={2}>Date</Th>
@@ -400,7 +400,7 @@ export default function TableComponent() {
                         </>}
                     </DrawerBody>
 
-                    <DrawerFooter justifyContent="flex-start">
+                    <DrawerFooter justifyContent="flex-start" borderTop="1px solid var(--chakra-colors-gray-200)">
                         <Flex justify="flex-start">
                             <Button variant='outline' onClick={onClose} size="sm" h={`28px`}>
                                 Close
