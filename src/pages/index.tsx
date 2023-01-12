@@ -36,7 +36,7 @@ import {
   faLinkedinIn,
   faTwitter,
 } from '@fortawesome/free-brands-svg-icons'
-import React from 'react'
+import React, { useState } from 'react'
 import TableComponent from 'src/components/Table/Table'
 import { Input } from '@chakra-ui/react'
 
@@ -44,9 +44,13 @@ Chart.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement
 
 const random = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1) + min)
 
-const Home: NextPage = () => (
-  <AdminLayout>
-    {/* <div className="row">
+
+export default function Home() {
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  return (
+
+    <AdminLayout>
+      {/* <div className="row">
       <div className="col-sm-6 col-lg-3">
         <Card bg="primary" text="white" className="mb-4">
           <Card.Body className="pb-0 d-flex justify-content-between align-items-start">
@@ -375,7 +379,7 @@ const Home: NextPage = () => (
       </div>
     </div> */}
 
-    {/* <Card className="mb-4">
+      {/* <Card className="mb-4">
       <Card.Body>
         <div className="d-flex justify-content-between">
           <div>
@@ -556,7 +560,7 @@ const Home: NextPage = () => (
       </Card.Footer>
     </Card> */}
 
-    {/* <div className="row">
+      {/* <div className="row">
       <div className="col-sm-6 col-lg-4">
         <Card
           className="mb-4"
@@ -646,21 +650,18 @@ const Home: NextPage = () => (
 
     </div> */}
 
-    <div className="row">
-      <div className="col-md-12">
-        <Card className="mb-4">
-          <Card.Header>
-            <Input placeholder="Search AWB/Order number/Phone number" w={`30%`} bg={`#fff`}></Input>
-          </Card.Header>
-          <Card.Body className="px-0 py-0">
-            <TableComponent />
-          </Card.Body>
-        </Card>
+      <div className="row">
+        <div className="col-md-12">
+          <Card className="mb-4">
+            <Card.Header>
+              <Input value={searchQuery} placeholder="Search AWB/Order number/Phone number" w={`30%`} bg={`#fff`} onChange={(e) => setSearchQuery(e.target.value)} />
+            </Card.Header>
+            <Card.Body className="px-0 py-0">
+              <TableComponent searchQuery={searchQuery} />
+            </Card.Body>
+          </Card>
+        </div>
       </div>
-    </div>
-  </AdminLayout>
-)
-
-
-
-export default Home
+    </AdminLayout>
+  )
+}

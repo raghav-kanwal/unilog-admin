@@ -1,56 +1,24 @@
 import { Text, Center, Spinner, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Input, useDisclosure, Box, Flex, Divider, Table, Td, Tr, TableCaption, TableContainer, Tbody, Th, Thead } from "@chakra-ui/react";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import { Fragment, useEffect, useRef, useState } from "react"
+import { Fragment, useEffect, useRef, useState, useCallback } from "react"
+import debounce from 'lodash.debounce';
 
-export default function TableComponent() {
+interface SearchQueryProps {
+    searchQuery: string
+}
+
+export default function TableComponent({ searchQuery }: SearchQueryProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [shippingList, setShippingList] = useState<any[]>([]);
     const [shipmentDetails, setShipmentDetails] = useState<any>()
     const [shipmentDetailIndex, setShipmentDetailIndex] = useState<number>(-1);
 
+    const handler = useCallback(debounce(fetchShipmentList, 200), []);
+
     useEffect(() => {
-        async function fetchShipmentList() {
-            try {
-                const res = await fetch("https://qa-unishipper.unicommerce.com/shipper/api/tracking-list", {
-                    method: "POST",
-                    headers: {
-                        'APP-KEY': '#$%^SK&SNLSH*^%SF'
-                    },
-                    body: JSON.stringify({ "search_text": "" })
-                });
-
-                if (!res.ok) throw new Error(res.statusText);
-
-                const data = await res.json();
-                setShippingList(data.result.tracking_records.map((row: any) => {
-                    return [
-                        <Box>
-                            <Text>AWB: {row.tracking_number}</Text>
-                            <Text>Courier: {row.shipping_source_code}</Text>
-                        </Box>,
-                        `${row.order_number}`,
-                        <Box>
-                            <Text>{row.customer_name}</Text>
-                            <Text>{row.customer_phone}</Text>
-                        </Box>,
-                        `${row.shipping_package_code}`,
-                        `${row.facility_code}`,
-                        `${row.current_wismo_display_status}`,
-                        <Text>{parseDate(row.order_datetime)}</Text>,
-                        <Text>{parseDate(row.dispatch_datetime)}</Text>,
-                        <Text>{parseDate(row.expected_delivered_datetime)}</Text>,
-                        <Text>{parseDate(row.delivered_datetime)}</Text>,
-                        `${row.no_of_items}`,
-                        `${row.tracking_number}`
-                    ]
-                }))
-            } catch (err) {
-                console.log(err);
-            }
-        }
-
-        fetchShipmentList();
-    }, [])
+        setShippingList([]);
+        handler();
+    }, [searchQuery])
 
     useEffect(() => {
         async function fetchShipmentDetails() {
@@ -73,6 +41,46 @@ export default function TableComponent() {
 
         if (shipmentDetailIndex != -1) fetchShipmentDetails();
     }, [shipmentDetailIndex])
+
+    async function fetchShipmentList() {
+        try {
+            const res = await fetch("https://qa-unishipper.unicommerce.com/shipper/api/tracking-list", {
+                method: "POST",
+                headers: {
+                    'APP-KEY': '#$%^SK&SNLSH*^%SF'
+                },
+                body: JSON.stringify({ "search_text": searchQuery })
+            });
+
+            if (!res.ok) throw new Error(res.statusText);
+
+            const data = await res.json();
+            setShippingList(data.result.tracking_records.map((row: any) => {
+                return [
+                    <Box>
+                        <Text>AWB: {row.tracking_number}</Text>
+                        <Text>Courier: {row.shipping_source_code}</Text>
+                    </Box>,
+                    `${row.order_number}`,
+                    <Box>
+                        <Text>{row.customer_name}</Text>
+                        <Text>{row.customer_phone}</Text>
+                    </Box>,
+                    `${row.shipping_package_code}`,
+                    `${row.facility_code}`,
+                    `${row.current_wismo_display_status}`,
+                    <Text>{parseDate(row.order_datetime)}</Text>,
+                    <Text>{parseDate(row.dispatch_datetime)}</Text>,
+                    <Text>{parseDate(row.expected_delivered_datetime)}</Text>,
+                    <Text>{parseDate(row.delivered_datetime)}</Text>,
+                    `${row.no_of_items}`,
+                    `${row.tracking_number}`
+                ]
+            }))
+        } catch (err) {
+            console.log(err);
+        }
+    }
 
     const showShipmentDetails = (index: number) => {
         setShipmentDetailIndex(index);
@@ -143,6 +151,7 @@ export default function TableComponent() {
                         position: 'relative',
                     }}
                 >
+                    {rowVirtualizer.getVirtualItems().length < 2 ? <Center h={`520px`}><Spinner /></Center> : ""}
                     {rowVirtualizer.getVirtualItems().map((virtualRow) => (
                         <Fragment key={virtualRow.index}>
                             {columnVirtualizer.getVirtualItems().map((virtualColumn) => (
