@@ -13,11 +13,11 @@ export default function TableComponent({ searchQuery }: SearchQueryProps) {
     const [shipmentDetails, setShipmentDetails] = useState<any>()
     const [shipmentDetailIndex, setShipmentDetailIndex] = useState<number>(-1);
 
-    const handler = useCallback(debounce(fetchShipmentList, 200), []);
+    const handler = useCallback(debounce((searchQuery) => fetchShipmentList(searchQuery), 200), []);
 
     useEffect(() => {
         setShippingList([]);
-        handler();
+        handler(searchQuery);
     }, [searchQuery])
 
     useEffect(() => {
@@ -42,7 +42,7 @@ export default function TableComponent({ searchQuery }: SearchQueryProps) {
         if (shipmentDetailIndex != -1) fetchShipmentDetails();
     }, [shipmentDetailIndex])
 
-    async function fetchShipmentList() {
+    async function fetchShipmentList(searchQuery: string) {
         try {
             const res = await fetch("https://qa-unishipper.unicommerce.com/shipper/api/tracking-list", {
                 method: "POST",
