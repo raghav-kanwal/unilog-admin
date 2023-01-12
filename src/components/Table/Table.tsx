@@ -23,7 +23,8 @@ export default function TableComponent({ searchQuery }: SearchQueryProps) {
     useEffect(() => {
         async function fetchShipmentDetails() {
             try {
-                const res = await fetch(`https://qa-unishipper.unicommerce.com/shipper/api/tracking-details?tr_number=${shippingList[shipmentDetailIndex][shippingList[shipmentDetailIndex].length - 1]}`, {
+                const trackingId = shippingList[shipmentDetailIndex][shippingList[shipmentDetailIndex].length - 1];
+                const res = await fetch(`https://qa-unishipper.unicommerce.com/shipper/api/tracking-details?tr_number=${trackingId}`, {
                     method: "GET",
                     headers: {
                         'APP-KEY': '#$%^SK&SNLSH*^%SF'
