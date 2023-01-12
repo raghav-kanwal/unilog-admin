@@ -47,25 +47,8 @@ export default function HeaderProfileNav() {
           <Dropdown.Header className="bg-light fw-bold rounded-top">Account</Dropdown.Header>
           <Link href="/" passHref legacyBehavior>
             <Dropdown.Item>
-              <ProfileDropdownItem icon={faBell}>
-                Updates
-                <Badge bg="info" className="ms-2">42</Badge>
-              </ProfileDropdownItem>
-            </Dropdown.Item>
-          </Link>
-          <Link href="/" passHref legacyBehavior>
-            <Dropdown.Item>
-              <ProfileDropdownItem icon={faEnvelopeOpen}>
-                Updates
-                <Badge bg="success" className="ms-2">42</Badge>
-              </ProfileDropdownItem>
-            </Dropdown.Item>
-          </Link>
-          <Link href="/" passHref legacyBehavior>
-            <Dropdown.Item>
               <ProfileDropdownItem icon={faListCheck}>
                 Tasks
-                <Badge bg="danger" className="ms-2">42</Badge>
               </ProfileDropdownItem>
             </Dropdown.Item>
           </Link>
@@ -73,7 +56,6 @@ export default function HeaderProfileNav() {
             <Dropdown.Item>
               <ProfileDropdownItem icon={faMessage}>
                 Messages
-                <Badge bg="warning" className="ms-2">42</Badge>
               </ProfileDropdownItem>
             </Dropdown.Item>
           </Link>
@@ -102,12 +84,7 @@ export default function HeaderProfileNav() {
 
           <Dropdown.Divider />
 
-          <Link href="/" passHref legacyBehavior>
-            <Dropdown.Item>
-              <ProfileDropdownItem icon={faLock}>Lock Account</ProfileDropdownItem>
-            </Dropdown.Item>
-          </Link>
-          <Link href="/login" passHref legacyBehavior>
+          <Link href="/admin/logout" passHref legacyBehavior>
             <Dropdown.Item>
               <ProfileDropdownItem icon={faPowerOff}>Logout</ProfileDropdownItem>
             </Dropdown.Item>

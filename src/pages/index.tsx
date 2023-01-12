@@ -38,6 +38,7 @@ import {
 } from '@fortawesome/free-brands-svg-icons'
 import React from 'react'
 import TableComponent from 'src/components/Table/Table'
+import { Input } from '@chakra-ui/react'
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Tooltip, Filler)
 
@@ -649,7 +650,7 @@ const Home: NextPage = () => (
       <div className="col-md-12">
         <Card className="mb-4">
           <Card.Header>
-            Shipment Tracking History
+            <Input placeholder="Search AWB/Order number/Phone number" w={`30%`} bg={`#fff`}></Input>
           </Card.Header>
           <Card.Body className="px-0 py-0">
             <TableComponent />

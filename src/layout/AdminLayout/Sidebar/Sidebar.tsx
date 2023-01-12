@@ -5,6 +5,7 @@ import classNames from 'classnames'
 import { Button } from 'react-bootstrap'
 import SidebarNav from './SidebarNav'
 import { Text, Flex } from '@chakra-ui/react'
+import Image from 'next/image';
 
 export default function Sidebar(props: { isShow: boolean; isShowMd: boolean }) {
   const { isShow, isShowMd } = props
@@ -34,7 +35,7 @@ export default function Sidebar(props: { isShow: boolean; isShowMd: boolean }) {
     >
       <div className="sidebar-brand d-none d-md-flex align-items-center justify-content-center">
         <Flex align="center">
-          <Text textAlign={'center'} m={0}>UniLog</Text>
+          <Image src="https://infowordpress.s3.ap-south-1.amazonaws.com/wp-content/uploads/2022/10/06114711/logo.webp" width="56" height="32" alt="Unicommerce" /> 
         </Flex>
         {/* <svg
           className="sidebar-brand-full"
