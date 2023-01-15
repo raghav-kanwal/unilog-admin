@@ -317,7 +317,7 @@ export default function TableComponent({ searchQuery }: SearchQueryProps) {
                                     Shipment Total Cost
                                     </Text>
                                     <Text className="value" fontSize="sm">
-                                    {parseDate(shipmentDetails.total_price) || "-"}
+                                    {shipmentDetails.total_price || "-"}
                                     </Text>
                                 </Box>
                                 <Box className="container" w={`25%`} p={0}>
@@ -355,6 +355,16 @@ export default function TableComponent({ searchQuery }: SearchQueryProps) {
                                     </Text>
                                 </Box>
                             </Flex>
+                            <Flex justifyContent={`flex-start`} mb={4}>
+                                <Box className="container" w={`100%`} p={0}>
+                                        <Text className="key" fontSize="xs" color="gray.600">
+                                        Customer Latest Feedback
+                                        </Text>
+                                        <Text className="value" fontSize="sm">
+                                        {shipmentDetails.customer_feedback || "-"}
+                                        </Text>
+                                    </Box>
+                                </Flex>
                             <Divider mb={4}/>
                             <Text fontSize="md" mb={4}>Order Items </Text>
                             <TableContainer>
