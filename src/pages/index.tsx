@@ -39,6 +39,7 @@ import {
 import React, { useState } from 'react'
 import TableComponent from 'src/components/Table/Table'
 import { Input } from '@chakra-ui/react'
+import Search from 'src/components/Table/Search'
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Tooltip, Filler)
 
@@ -653,8 +654,9 @@ export default function Home() {
       <div className="row">
         <div className="col-md-12">
           <Card className="mb-4">
-            <Card.Header>
+            <Card.Header className='d-flex justify-content-between'>
               <Input value={searchQuery} placeholder="Search AWB/Order number/Phone number" w={`30%`} bg={`#fff`} onChange={(e) => setSearchQuery(e.target.value)} />
+              <Search />
             </Card.Header>
             <Card.Body className="px-0 py-0">
               <TableComponent searchQuery={searchQuery} />
