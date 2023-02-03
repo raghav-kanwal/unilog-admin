@@ -21,8 +21,7 @@ export default function Home() {
           <Card className="mb-4">
             <CardHeader>
               <Flex justifyContent="space-between">
-                <Input value={searchQuery} placeholder="Search AWB/Order number/Phone number" w={`30%`} bg={`#fff`} onChange={(e) => setSearchQuery(e.target.value)} />\
-
+                <Input value={searchQuery} placeholder="Search AWB/Order number/Phone number" w={`30%`} bg={`#fff`} onChange={(e) => setSearchQuery(e.target.value)} />
                 <Flex justifyContent="flex-end" align={`center`}>
                   <Text as="span" mr={2}>Timeline: </Text>
                   <Menu>
