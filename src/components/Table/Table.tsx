@@ -12,7 +12,7 @@ export default function TableComponent({ searchQuery }: SearchQueryProps) {
     const [shippingList, setShippingList] = useState<any[]>([]);
     const [shipmentDetails, setShipmentDetails] = useState<any>()
     const [shipmentDetailIndex, setShipmentDetailIndex] = useState<number>(-1);
-    const API_HOST = "https://qa-unishipper.unicommerce.com" // "https://qa-unishipper.unicommerce.com", "http://localhost:8000"
+    const API_HOST = "https://unilog.unicommerce.com" // "https://unilog.unicommerce.com", "http://localhost:8000"
 
 
     const handler = useCallback(debounce((searchQuery) => fetchShipmentList(searchQuery), 200), []);
@@ -27,7 +27,7 @@ export default function TableComponent({ searchQuery }: SearchQueryProps) {
             try {
                 const trackingId = shippingList[shipmentDetailIndex][shippingList[shipmentDetailIndex].length - 1];
                 const res = await fetch(API_HOST + "/shipper/api/tracking-details?tr_number=" + trackingId, {
-                //const res = await fetch(`https://qa-unishipper.unicommerce.com/shipper/api/tracking-details?tr_number=${trackingId}`, {
+                //const res = await fetch(`https://unilog.unicommerce.com/shipper/api/tracking-details?tr_number=${trackingId}`, {
                     method: "GET",
                     headers: {
                         'APP-KEY': '#$%^SK&SNLSH*^%SF'

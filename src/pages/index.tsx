@@ -30,8 +30,8 @@ export default function Home() {
                     </MenuButton>
                     <MenuList>
                       {Object.keys(Duration).map((key, index) => (
-                        <MenuItem key={index} onClick={() => setDuration(Duration[key])}>
-                          {Duration[key]}
+                        <MenuItem key={index} onClick={() => setDuration(Duration[key as keyof typeof Duration])}>
+                          {Duration[key as keyof typeof Duration]}
                         </MenuItem>
                       ))}
                     </MenuList>
