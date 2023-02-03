@@ -3,9 +3,7 @@ import { AiFillCaretDown } from "react-icons/ai";
 import React, { useState } from 'react'
 import TableComponent from 'src/components/Table/Table'
 import { Box, Flex, Input, Menu, MenuButton, MenuItem, MenuList, Text, Button, Card, CardHeader, CardBody } from '@chakra-ui/react'
-import { Duration } from 'enums'
-import { MultiSelect, SelectionVisibilityMode } from 'chakra-multiselect';
-import styles from "../styles/index.module.scss";
+import { Duration } from 'enums';
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -72,17 +70,6 @@ export default function Home() {
                       )
                       : null
                   }
-                </Flex>
-                <Flex align={`center`} gap={2}>
-                  <Text>More Filters: </Text>
-                  <div className={styles.multiSelect} >
-                  <MultiSelect
-                    options={options}
-                    value={moreFilters}
-                    onChange={setMoreFilters}
-                    selectionVisibleIn={SelectionVisibilityMode.List}
-                  />
-                  </div>
                 </Flex>
                 <Button colorScheme="teal" size="sm">Search</Button>
               </Flex>
