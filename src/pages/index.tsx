@@ -4,6 +4,8 @@ import React, { useState } from 'react'
 import TableComponent from 'src/components/Table/Table'
 import { Box, Flex, Input, Menu, MenuButton, MenuItem, MenuList, Text, Button, Card, CardHeader, CardBody } from '@chakra-ui/react'
 import { Duration } from 'enums'
+import { MultiSelect, SelectionVisibilityMode } from 'chakra-multiselect';
+import styles from "../styles/index.module.scss";
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -11,6 +13,24 @@ export default function Home() {
   const [duration, setDuration] = useState<Duration>(Duration.LAST_WEEK);
   const [fromDate, setFromDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const [toDate, setToDate] = useState<string>(new Date().toISOString().split('T')[0]);
+  const [moreFilters, setMoreFilters] = useState([]);
+
+  const options = [{
+    label: "Delivered",
+    value: "delivered"
+  },{
+    label: "Sent",
+    value: "sent"
+  },{
+    label: "Masked",
+    value: "masked"
+  },{
+    label: "En Route",
+    value: "enroute"
+  },{
+    label: "Testing",
+    value: "testing"
+  }];
 
   return (
 
@@ -19,13 +39,13 @@ export default function Home() {
       <div className="row">
         <div className="col-md-12">
           <Card className="mb-4">
-            <CardHeader>
-              <Flex justifyContent="space-between">
-                <Input value={searchQuery} placeholder="Search AWB/Order number/Phone number" w={`30%`} bg={`#fff`} onChange={(e) => setSearchQuery(e.target.value)} />
+            <CardHeader bg="gray.100" py={2}>
+              <Flex justifyContent="space-between" align="center">
+                <Input size="sm" value={searchQuery} placeholder="Search AWB/Order number/Phone number" w={`15%`} bg={`#fff`} onChange={(e) => setSearchQuery(e.target.value)} />
                 <Flex justifyContent="flex-end" align={`center`}>
                   <Text as="span" mr={2}>Timeline: </Text>
                   <Menu>
-                    <MenuButton as={Button} rightIcon={<AiFillCaretDown />} w="8.5rem" h={`2rem`} p={2} fontSize="sm">
+                    <MenuButton as={Button} bg={`white`} rightIcon={<AiFillCaretDown />} w="8.5rem" h={`2rem`} p={2} fontSize="sm">
                       {duration}
                     </MenuButton>
                     <MenuList>
@@ -53,9 +73,21 @@ export default function Home() {
                       : null
                   }
                 </Flex>
+                <Flex align={`center`} gap={2}>
+                  <Text>More Filters: </Text>
+                  <div className={styles.multiSelect} >
+                  <MultiSelect
+                    options={options}
+                    value={moreFilters}
+                    onChange={setMoreFilters}
+                    selectionVisibleIn={SelectionVisibilityMode.List}
+                  />
+                  </div>
+                </Flex>
+                <Button colorScheme="teal" size="sm">Search</Button>
               </Flex>
             </CardHeader>
-            <CardBody className="px-0 py-0">
+            <CardBody className="px-0 py-0" bg="white">
               <TableComponent searchQuery={searchQuery} />
             </CardBody>
           </Card>

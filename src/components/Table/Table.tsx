@@ -105,18 +105,18 @@ export default function TableComponent({ searchQuery }: SearchQueryProps) {
     }));
 
     const columns = [
-        { name: 'Shipping Provider', width: 150 },
-        { name: 'Sale Order', width: 120 },
-        { name: 'Customer', width: 135 },
-        { name: 'Shipping Package', width: 110 },
-        { name: 'Facility', width: 90 },
+        { name: 'Shipping Provider', width: 160 },
+        { name: 'Sale Order', width: 130 },
+        { name: 'Customer', width: 145 },
+        { name: 'Shipping Package', width: 120 },
+        { name: 'Facility', width: 100 },
         { name: 'Tracking Status', width: 110 },
         { name: 'Order Date', width: 110 },
         { name: 'Dispatch Date', width: 110 },
         { name: 'Expected Delivery Date', width: 110 },
         { name: 'Delivery Date', width: 110 },
-        { name: 'No of Attempts', width: 85 },
-        { name: 'Action', width: 80 },
+        { name: 'No of Attempts', width: 100 },
+        { name: 'Action', width: 100 },
     ];
 
     const parentRef = useRef(null)
