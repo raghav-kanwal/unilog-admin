@@ -1,33 +1,97 @@
 import { AdminLayout } from '@layout'
 import { AiFillCaretDown } from "react-icons/ai";
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import TableComponent from 'src/components/Table/Table'
-import { Box, Flex, Input, Menu, MenuButton, MenuItem, MenuList, Text, Button, Card, CardHeader, CardBody } from '@chakra-ui/react'
+import { Box, Flex, Input, Menu, MenuButton, MenuItem, MenuList, Text, Button, Card, CardHeader, CardBody, useToast } from '@chakra-ui/react'
 import { Duration } from 'enums';
+import { resolveDuration } from 'utils';
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState<string>('');
 
-  const [duration, setDuration] = useState<Duration>(Duration.LAST_WEEK);
-  const [fromDate, setFromDate] = useState<string>(new Date().toISOString().split('T')[0]);
-  const [toDate, setToDate] = useState<string>(new Date().toISOString().split('T')[0]);
+  const toast = useToast();
 
-  const options = [{
-    label: "Delivered",
-    value: "delivered"
-  }, {
-    label: "Sent",
-    value: "sent"
-  }, {
-    label: "Masked",
-    value: "masked"
-  }, {
-    label: "En Route",
-    value: "enroute"
-  }, {
-    label: "Testing",
-    value: "testing"
-  }];
+  const [shippingList, setShippingList] = useState<any[]>([]);
+  const [duration, setDuration] = useState<Duration>(Duration.LAST_WEEK);
+
+  const { from, to } = resolveDuration(duration, '', '');
+  const [fromDate, setFromDate] = useState<string>(from);
+  const [toDate, setToDate] = useState<string>(to);
+
+  const API_HOST = "https://unilog.unicommerce.com" // "https://unilog.unicommerce.com", "http://localhost:8000"
+
+  const parseDate = (oldDate: string): string => !oldDate ? "-" : (new Date(oldDate).toLocaleDateString("en-IN", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric"
+  }));
+
+  async function fetchShipmentList() {
+    try {
+      const res = await fetch(API_HOST + "/shipper/api/tracking-list", {
+        method: "POST",
+        headers: {
+          'APP-KEY': '#$%^SK&SNLSH*^%SF'
+        },
+        body: JSON.stringify({ "search_text": searchQuery, "from": fromDate, "to": toDate })
+      });
+
+      if (!res.ok) throw new Error(res.statusText);
+
+      const data = await res.json();
+      setShippingList(data.result.tracking_records.map((row: any) => {
+        return [
+          <Box>
+            <Text>AWB: {row.tracking_number}</Text>
+            <Text>Courier: {row.shipping_source_code}</Text>
+          </Box>,
+          `${row.order_number}`,
+          <Box>
+            <Text>{row.customer_name}</Text>
+            <Text>{row.customer_phone}</Text>
+          </Box>,
+          `${row.shipping_package_code}`,
+          `${row.facility_code}`,
+          `${row.current_wismo_display_status}`,
+          <Text>{parseDate(row.order_datetime)}</Text>,
+          <Text>{parseDate(row.dispatch_datetime)}</Text>,
+          <Text>{parseDate(row.expected_delivered_datetime)}</Text>,
+          <Text>{parseDate(row.delivered_datetime)}</Text>,
+          `${row.no_of_items}`,
+          `${row.tracking_number}`
+        ]
+      }))
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    fetchShipmentList();
+  }, [])
+
+  useEffect(() => {
+    const { from, to } = resolveDuration(duration, fromDate, toDate);
+    setFromDate(from);
+    setToDate(to);
+  }, [duration])
+
+  const handleSearch = () => {
+    if (new Date(fromDate).getTime() > new Date(toDate).getTime()) {
+      toast({
+        status: 'error',
+        title: 'Invalid date range',
+        variant: 'left-accent',
+        position: 'top-right',
+        duration: 4000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    fetchShipmentList();
+  }
 
   return (
 
@@ -72,12 +136,12 @@ export default function Home() {
                         : null
                     }
                   </Flex>
-                  <Button colorScheme="teal" size="sm">Search</Button>
+                  <Button colorScheme="teal" size="sm" onClick={handleSearch}>Search</Button>
                 </Flex>
               </Flex>
             </CardHeader>
             <CardBody className="px-0 py-0" bg="white">
-              <TableComponent searchQuery={searchQuery} />
+              <TableComponent parseDate={parseDate} shippingList={shippingList} />
             </CardBody>
           </Card>
         </div>

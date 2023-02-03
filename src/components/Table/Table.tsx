@@ -4,30 +4,23 @@ import { Fragment, useEffect, useRef, useState, useCallback } from "react"
 import debounce from 'lodash.debounce';
 
 interface SearchQueryProps {
-    searchQuery: string
+    shippingList: any;
+    parseDate: (arg0: string) => string
 }
 
-export default function TableComponent({ searchQuery }: SearchQueryProps) {
+export default function TableComponent({ shippingList, parseDate }: SearchQueryProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [shippingList, setShippingList] = useState<any[]>([]);
+
     const [shipmentDetails, setShipmentDetails] = useState<any>()
     const [shipmentDetailIndex, setShipmentDetailIndex] = useState<number>(-1);
     const API_HOST = "https://unilog.unicommerce.com" // "https://unilog.unicommerce.com", "http://localhost:8000"
-
-
-    const handler = useCallback(debounce((searchQuery) => fetchShipmentList(searchQuery), 200), []);
-
-    useEffect(() => {
-        setShippingList([]);
-        handler(searchQuery);
-    }, [searchQuery])
 
     useEffect(() => {
         async function fetchShipmentDetails() {
             try {
                 const trackingId = shippingList[shipmentDetailIndex][shippingList[shipmentDetailIndex].length - 1];
                 const res = await fetch(API_HOST + "/shipper/api/tracking-details?tr_number=" + trackingId, {
-                //const res = await fetch(`https://unilog.unicommerce.com/shipper/api/tracking-details?tr_number=${trackingId}`, {
+                    //const res = await fetch(`https://unilog.unicommerce.com/shipper/api/tracking-details?tr_number=${trackingId}`, {
                     method: "GET",
                     headers: {
                         'APP-KEY': '#$%^SK&SNLSH*^%SF'
@@ -46,46 +39,6 @@ export default function TableComponent({ searchQuery }: SearchQueryProps) {
         if (shipmentDetailIndex != -1) fetchShipmentDetails();
     }, [shipmentDetailIndex])
 
-    async function fetchShipmentList(searchQuery: string) {
-        try {
-            const res = await fetch(API_HOST + "/shipper/api/tracking-list", {
-                method: "POST",
-                headers: {
-                    'APP-KEY': '#$%^SK&SNLSH*^%SF'
-                },
-                body: JSON.stringify({ "search_text": searchQuery })
-            });
-
-            if (!res.ok) throw new Error(res.statusText);
-
-            const data = await res.json();
-            setShippingList(data.result.tracking_records.map((row: any) => {
-                return [
-                    <Box>
-                        <Text>AWB: {row.tracking_number}</Text>
-                        <Text>Courier: {row.shipping_source_code}</Text>
-                    </Box>,
-                    `${row.order_number}`,
-                    <Box>
-                        <Text>{row.customer_name}</Text>
-                        <Text>{row.customer_phone}</Text>
-                    </Box>,
-                    `${row.shipping_package_code}`,
-                    `${row.facility_code}`,
-                    `${row.current_wismo_display_status}`,
-                    <Text>{parseDate(row.order_datetime)}</Text>,
-                    <Text>{parseDate(row.dispatch_datetime)}</Text>,
-                    <Text>{parseDate(row.expected_delivered_datetime)}</Text>,
-                    <Text>{parseDate(row.delivered_datetime)}</Text>,
-                    `${row.no_of_items}`,
-                    `${row.tracking_number}`
-                ]
-            }))
-        } catch (err) {
-            console.log(err);
-        }
-    }
-
     const showShipmentDetails = (index: number) => {
         setShipmentDetailIndex(index);
         onOpen();
@@ -96,13 +49,6 @@ export default function TableComponent({ searchQuery }: SearchQueryProps) {
         setShipmentDetails(null)
         onClose();
     }
-
-    const parseDate = (oldDate: string): string => !oldDate ? "-" : (new Date(oldDate).toLocaleDateString("en-IN", {
-        weekday: "long",
-        year: "numeric",
-        month: "long",
-        day: "numeric"
-    }));
 
     const columns = [
         { name: 'Shipping Provider', width: 160 },
@@ -197,13 +143,13 @@ export default function TableComponent({ searchQuery }: SearchQueryProps) {
                 onClose={handleOnClose}
                 size='xl'
             >
-                <DrawerOverlay transform="none !important"/>
+                <DrawerOverlay transform="none !important" />
                 <DrawerContent transform="none !important">
                     <DrawerCloseButton />
                     <DrawerHeader py={2}>Shipment Details</DrawerHeader>
 
                     <DrawerBody>
-                        {!shipmentDetails && <Center h={`100%`}><Spinner/></Center>}
+                        {!shipmentDetails && <Center h={`100%`}><Spinner /></Center>}
                         {shipmentDetails && <>
                             <Text fontSize="md" mb={4}>Basic Information</Text>
                             <Flex justifyContent="space-between" mb={3}>
@@ -244,7 +190,7 @@ export default function TableComponent({ searchQuery }: SearchQueryProps) {
                             <Flex justifyContent="space-between" mb={3}>
                                 <Box className="container" w={`25%`} p={0}>
                                     <Text className="key" fontSize="xs" color="gray.600">
-                                    Courier
+                                        Courier
                                     </Text>
                                     <Text className="value" fontSize="sm">
                                         {shipmentDetails.shipping_source_code || "-"}
@@ -252,7 +198,7 @@ export default function TableComponent({ searchQuery }: SearchQueryProps) {
                                 </Box>
                                 <Box className="container" w={`25%`} p={0}>
                                     <Text className="key" fontSize="xs" color="gray.600">
-                                    Shipping Method Type
+                                        Shipping Method Type
                                     </Text>
                                     <Text className="value" fontSize="sm">
                                         {shipmentDetails.shipping_type || "-"}
@@ -260,7 +206,7 @@ export default function TableComponent({ searchQuery }: SearchQueryProps) {
                                 </Box>
                                 <Box className="container" w={`25%`} p={0}>
                                     <Text className="key" fontSize="xs" color="gray.600">
-                                    Payment Method
+                                        Payment Method
                                     </Text>
                                     <Text className="value" fontSize="sm">
                                         {shipmentDetails.payment_method || "-"}
@@ -268,7 +214,7 @@ export default function TableComponent({ searchQuery }: SearchQueryProps) {
                                 </Box>
                                 <Box className="container" w={`25%`} p={0}>
                                     <Text className="key" fontSize="xs" color="gray.600">
-                                    Number of Items
+                                        Number of Items
                                     </Text>
                                     <Text className="value" fontSize="sm">
                                         {shipmentDetails.no_of_items || "-"}
@@ -279,34 +225,34 @@ export default function TableComponent({ searchQuery }: SearchQueryProps) {
                             <Flex justifyContent="space-between" mb={3}>
                                 <Box className="container" w={`25%`} p={0}>
                                     <Text className="key" fontSize="xs" color="gray.600">
-                                    Date of Order
+                                        Date of Order
                                     </Text>
                                     <Text className="value" fontSize="sm">
-                                    {parseDate(shipmentDetails.order_datetime) || "-"}
+                                        {parseDate(shipmentDetails.order_datetime) || "-"}
                                     </Text>
                                 </Box>
                                 <Box className="container" w={`25%`} p={0}>
                                     <Text className="key" fontSize="xs" color="gray.600">
-                                    Date of Dispatch
+                                        Date of Dispatch
                                     </Text>
                                     <Text className="value" fontSize="sm">
-                                    {parseDate(shipmentDetails.dispatch_datetime) || "-"}
+                                        {parseDate(shipmentDetails.dispatch_datetime) || "-"}
                                     </Text>
                                 </Box>
                                 <Box className="container" w={`25%`} p={0}>
                                     <Text className="key" fontSize="xs" color="gray.600">
-                                    Date of Expected Delivery
+                                        Date of Expected Delivery
                                     </Text>
                                     <Text className="value" fontSize="sm">
-                                    {parseDate(shipmentDetails.expected_delivered_datetime) || "-"}
+                                        {parseDate(shipmentDetails.expected_delivered_datetime) || "-"}
                                     </Text>
                                 </Box>
                                 <Box className="container" w={`25%`} p={0}>
                                     <Text className="key" fontSize="xs" color="gray.600">
-                                    Date of Delivery
+                                        Date of Delivery
                                     </Text>
                                     <Text className="value" fontSize="sm">
-                                    {parseDate(shipmentDetails.delivered_datetime) || "-"}
+                                        {parseDate(shipmentDetails.delivered_datetime) || "-"}
                                     </Text>
                                 </Box>
                             </Flex>
@@ -314,82 +260,83 @@ export default function TableComponent({ searchQuery }: SearchQueryProps) {
                             <Flex justifyContent="space-between" mb={3}>
                                 <Box className="container" w={`25%`} p={0}>
                                     <Text className="key" fontSize="xs" color="gray.600">
-                                    Shipment Total Cost
+                                        Shipment Total Cost
                                     </Text>
                                     <Text className="value" fontSize="sm">
-                                    {shipmentDetails.total_price || "-"}
+                                        {shipmentDetails.total_price || "-"}
                                     </Text>
                                 </Box>
                                 <Box className="container" w={`25%`} p={0}>
                                     <Text className="key" fontSize="xs" color="gray.600">
-                                    Customer Name
+                                        Customer Name
                                     </Text>
                                     <Text className="value" fontSize="sm">
-                                    {shipmentDetails.customer_name || "-"}
+                                        {shipmentDetails.customer_name || "-"}
                                     </Text>
                                 </Box>
                                 <Box className="container" w={`25%`} p={0}>
                                     <Text className="key" fontSize="xs" color="gray.600">
-                                    Customer Phone
+                                        Customer Phone
                                     </Text>
                                     <Text className="value" fontSize="sm">
-                                    {shipmentDetails.customer_phone || "-"}
+                                        {shipmentDetails.customer_phone || "-"}
                                     </Text>
                                 </Box>
                                 <Box className="container" w={`25%`} p={0}>
                                     <Text className="key" fontSize="xs" color="gray.600">
-                                    Customer Email
+                                        Customer Email
                                     </Text>
                                     <Text className="value" fontSize="sm">
-                                    {shipmentDetails.customer_email || "-"}
-                                    </Text>
-                                </Box>
-                            </Flex>
-                            <Flex justifyContent={`flex-start`} mb={4}>
-                            <Box className="container" w={`100%`} p={0}>
-                                    <Text className="key" fontSize="xs" color="gray.600">
-                                    Customer Address
-                                    </Text>
-                                    <Text className="value" fontSize="sm">
-                                    {shipmentDetails.delivery_address || "-"}
+                                        {shipmentDetails.customer_email || "-"}
                                     </Text>
                                 </Box>
                             </Flex>
                             <Flex justifyContent={`flex-start`} mb={4}>
                                 <Box className="container" w={`100%`} p={0}>
-                                        <Text className="key" fontSize="xs" color="gray.600">
+                                    <Text className="key" fontSize="xs" color="gray.600">
+                                        Customer Address
+                                    </Text>
+                                    <Text className="value" fontSize="sm">
+                                        {shipmentDetails.delivery_address || "-"}
+                                    </Text>
+                                </Box>
+                            </Flex>
+                            <Flex justifyContent={`flex-start`} mb={4}>
+                                <Box className="container" w={`100%`} p={0}>
+                                    <Text className="key" fontSize="xs" color="gray.600">
                                         Customer Latest Feedback
-                                        </Text>
-                                        <Text className="value" fontSize="sm">
+                                    </Text>
+                                    <Text className="value" fontSize="sm">
                                         {shipmentDetails.customer_feedback || "-"}
-                                        </Text>
-                                    </Box>
-                                </Flex>
-                            <Divider mb={4}/>
+                                    </Text>
+                                </Box>
+                            </Flex>
+                            <Divider mb={4} />
                             <Text fontSize="md" mb={4}>Order Items </Text>
                             <TableContainer>
                                 <Table variant='simple' border={`1px solid var(--chakra-colors-gray-200)`}>
                                     <Thead>
-                                    <Tr>
-                                        <Th textTransform={`initial`} fontSize="xs" fontWeight="normal" px={2} py={2}>SKU</Th>
-                                        <Th textTransform={`initial`} fontSize="xs" fontWeight="normal" px={2} py={2} borderLeft="1px solid var(--chakra-colors-gray-200)">Channel Product</Th>
-                                        <Th textTransform={`initial`} fontSize="xs" fontWeight="normal" px={2} py={2} borderLeft="1px solid var(--chakra-colors-gray-200)">Total Cost</Th>
-                                    </Tr>
+                                        <Tr>
+                                            <Th textTransform={`initial`} fontSize="xs" fontWeight="normal" px={2} py={2}>SKU</Th>
+                                            <Th textTransform={`initial`} fontSize="xs" fontWeight="normal" px={2} py={2} borderLeft="1px solid var(--chakra-colors-gray-200)">Channel Product</Th>
+                                            <Th textTransform={`initial`} fontSize="xs" fontWeight="normal" px={2} py={2} borderLeft="1px solid var(--chakra-colors-gray-200)">Total Cost</Th>
+                                        </Tr>
                                     </Thead>
                                     <Tbody>
-                                    {
-                                        shipmentDetails && shipmentDetails.line_items && shipmentDetails.line_items.map((item: any, idx: number) => { return <Tr key={idx}>
-                                                <Td px={2} py={2} fontSize="sm">{item.seller_sku_code}</Td>
-                                                <Td px={2} py={2} fontSize="sm" borderLeft="1px solid var(--chakra-colors-gray-200)">{item.seller_sku_code}</Td>
-                                                <Td px={2} py={2} fontSize="sm" borderLeft="1px solid var(--chakra-colors-gray-200)">{item.total_price}</Td>
-                                            </Tr>
-                                        })
-                                    }
+                                        {
+                                            shipmentDetails && shipmentDetails.line_items && shipmentDetails.line_items.map((item: any, idx: number) => {
+                                                return <Tr key={idx}>
+                                                    <Td px={2} py={2} fontSize="sm">{item.seller_sku_code}</Td>
+                                                    <Td px={2} py={2} fontSize="sm" borderLeft="1px solid var(--chakra-colors-gray-200)">{item.seller_sku_code}</Td>
+                                                    <Td px={2} py={2} fontSize="sm" borderLeft="1px solid var(--chakra-colors-gray-200)">{item.total_price}</Td>
+                                                </Tr>
+                                            })
+                                        }
                                     </Tbody>
                                 </Table>
                             </TableContainer>
-                            
-                            <Divider my={4}/>
+
+                            <Divider my={4} />
 
                             <Text fontSize="md" mb={4}>Tracking Events</Text>
                             {/* {shipmentDetails && shipmentDetails.tracking_events && shipmentDetails.tracking_events.map((item: any, idx: number) => {
@@ -402,21 +349,22 @@ export default function TableComponent({ searchQuery }: SearchQueryProps) {
                             <TableContainer>
                                 <Table variant='simple' border={`1px solid var(--chakra-colors-gray-200)`} mb={2}>
                                     <Thead>
-                                    <Tr>
-                                        <Th textTransform={`initial`} fontSize="xs" fontWeight="normal" px={2} py={2}>Date</Th>
-                                        <Th textTransform={`initial`} fontSize="xs" fontWeight="normal" px={2} py={2} borderLeft="1px solid var(--chakra-colors-gray-200)">Status</Th>
-                                        <Th textTransform={`initial`} fontSize="xs" fontWeight="normal" px={2} py={2} borderLeft="1px solid var(--chakra-colors-gray-200)">Location</Th>
-                                    </Tr>
+                                        <Tr>
+                                            <Th textTransform={`initial`} fontSize="xs" fontWeight="normal" px={2} py={2}>Date</Th>
+                                            <Th textTransform={`initial`} fontSize="xs" fontWeight="normal" px={2} py={2} borderLeft="1px solid var(--chakra-colors-gray-200)">Status</Th>
+                                            <Th textTransform={`initial`} fontSize="xs" fontWeight="normal" px={2} py={2} borderLeft="1px solid var(--chakra-colors-gray-200)">Location</Th>
+                                        </Tr>
                                     </Thead>
                                     <Tbody>
-                                    {
-                                        shipmentDetails && shipmentDetails.tracking_events && shipmentDetails.tracking_events.map((item: any, idx: number) => { return <Tr key={idx}>
-                                                <Td px={2} py={2} fontSize="sm">{item.tracking_datetime || "-"}</Td>
-                                                <Td px={2} py={2} fontSize="sm" borderLeft="1px solid var(--chakra-colors-gray-200)">{item.tracking_status || "-"}</Td>
-                                                <Td px={2} py={2} fontSize="sm" borderLeft="1px solid var(--chakra-colors-gray-200)">{item.tracking_location || "-"}</Td>
-                                            </Tr>
-                                        })
-                                    }
+                                        {
+                                            shipmentDetails && shipmentDetails.tracking_events && shipmentDetails.tracking_events.map((item: any, idx: number) => {
+                                                return <Tr key={idx}>
+                                                    <Td px={2} py={2} fontSize="sm">{item.tracking_datetime || "-"}</Td>
+                                                    <Td px={2} py={2} fontSize="sm" borderLeft="1px solid var(--chakra-colors-gray-200)">{item.tracking_status || "-"}</Td>
+                                                    <Td px={2} py={2} fontSize="sm" borderLeft="1px solid var(--chakra-colors-gray-200)">{item.tracking_location || "-"}</Td>
+                                                </Tr>
+                                            })
+                                        }
                                     </Tbody>
                                 </Table>
                             </TableContainer>
