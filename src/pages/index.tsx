@@ -5,17 +5,18 @@ import { Box, Flex, Input, Menu, MenuButton, MenuItem, MenuList, Text, Button, C
 import { Duration } from 'enums';
 import { resolveDuration } from 'utils';
 import ShipmentList from 'src/components/ShipmentList/ShipmentList';
-import { useQueryClient } from '@tanstack/react-query';
+import { Filters } from 'interfaces';
 
 export default function Home() {
-  const queryClient = useQueryClient();
   const toast = useToast();
+  const { from, to } = resolveDuration(Duration.LAST_WEEK, '', '');
 
+  const [toDate, setToDate] = useState<string>(to);
+  const [fromDate, setFromDate] = useState<string>(from);
   const [duration, setDuration] = useState<Duration>(Duration.LAST_WEEK);
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const { from, to } = resolveDuration(duration, '', '');
-  const [fromDate, setFromDate] = useState<string>(from);
-  const [toDate, setToDate] = useState<string>(to);
+
+  const [filters, setFilters] = useState<Filters>({ searchText: searchQuery, from: fromDate, to: toDate });
 
   useEffect(() => {
     const { from, to } = resolveDuration(duration, fromDate, toDate);
@@ -36,7 +37,11 @@ export default function Home() {
       return;
     }
 
-    queryClient.invalidateQueries(['fetchShipmentList']);
+    setFilters({
+      searchText: searchQuery,
+      from: fromDate,
+      to: toDate,
+    })
   }
 
   return (
@@ -86,7 +91,7 @@ export default function Home() {
               </Flex>
             </CardHeader>
             <CardBody className="px-0 py-0" bg="white">
-              <ShipmentList searchText={searchQuery} duration={duration} from={fromDate} to={toDate} />
+              <ShipmentList filters={filters} />
             </CardBody>
           </Card>
         </div>

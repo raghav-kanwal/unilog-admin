@@ -7,21 +7,19 @@ import { Button, Center, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, D
 import ShipmentDetails from "../ShipmentDetails/ShipmentDetails";
 import { useMemo, useState } from "react";
 import { Spinner } from "react-bootstrap";
+import { Filters } from "interfaces";
 
 interface Props {
-    searchText: string;
-    duration: Duration;
-    from: string;
-    to: string;
+    filters: Filters
 }
 
-export default function ShipmentList({ searchText, duration, from, to }: Props) {
+export default function ShipmentList({ filters }: Props) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [trackingNumber, setTrackingNumber] = useState<string | null>(null);
 
     const { isLoading, isError, fetchStatus, data } = useQuery({
-        queryKey: ['fetchShipmentList'],
-        queryFn: () => fetchShipmentList(searchText, from, to),
+        queryKey: ['fetchShipmentList', filters],
+        queryFn: () => fetchShipmentList(filters.searchText, filters.from, filters.to),
         refetchOnWindowFocus: false,
     });
 
