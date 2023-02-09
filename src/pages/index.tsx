@@ -124,6 +124,19 @@ export default function Home() {
   }
 
   const handleDownloadAsCSV = () => {
+    const days90InMiliSeconds = 90 * 24 * 60 * 60 * 1000;
+    if (new Date(fromDate).getTime() + days90InMiliSeconds < new Date(toDate).getTime()) {
+      toast({
+        status: 'error',
+        title: 'Maximum time range is 90 days',
+        variant: 'left-accent',
+        position: 'top-right',
+        duration: 4000,
+        isClosable: true,
+      });
+      return;
+    }
+    
     const data = getDownloadableData().then(data => {
       console.log(data);
       if(!!data) {
