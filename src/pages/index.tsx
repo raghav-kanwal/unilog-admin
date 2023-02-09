@@ -19,7 +19,7 @@ export default function Home() {
   const { from, to } = resolveDuration(duration, '', '');
   const [fromDate, setFromDate] = useState<string>(from);
   const [toDate, setToDate] = useState<string>(to);
-  const csvLink = useRef()
+  const csvLink = useRef<HTMLAnchorElement>(null);
 
   const API_HOST = "https://unilog.unicommerce.com" // "https://unilog.unicommerce.com", "http://localhost:8000"
 
@@ -136,11 +136,11 @@ export default function Home() {
       });
       return;
     }
-    
+
     const data = getDownloadableData().then(data => {
       console.log(data);
       if(!!data) {
-        const csv = PapaParse.unparse(data);
+        const csv = PapaParse.unparse(data.result.tracking_records);
         console.log(csv);
         const blob = new Blob([csv], {type: "text/csv"});
         const a = document.createElement("a");
