@@ -17,10 +17,11 @@ export default function ShipmentList({ filters }: Props) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [trackingNumber, setTrackingNumber] = useState<string | null>(null);
 
-    const { isLoading, isError, fetchStatus, data } = useQuery({
+    const { isLoading, isError, isFetching, data } = useQuery({
         queryKey: ['fetchShipmentList', filters],
         queryFn: () => fetchShipmentList(filters.searchText, filters.from, filters.to),
         refetchOnWindowFocus: false,
+        enabled: !!filters.from?.length && !!filters.to?.length,
     });
 
     const showShipmentDetails = (row: any) => {
@@ -42,7 +43,7 @@ export default function ShipmentList({ filters }: Props) {
         getCoreRowModel: getCoreRowModel(),
     })
 
-    if (isLoading || fetchStatus === 'fetching') return <Center h="400px"><Spinner /></Center>
+    if (isLoading || isFetching) return <Center h="400px"><Spinner /></Center>
     if (isError) return <Center h="400px">An error occurred, please try again later!</Center>
 
     return (
