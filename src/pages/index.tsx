@@ -29,6 +29,19 @@ export default function Home() {
 
   async function fetchShipmentList() {
     try {
+      const days90InMiliSeconds = 90 * 24 * 60 * 60 * 1000;
+      if (new Date(fromDate).getTime() + days90InMiliSeconds < new Date(toDate).getTime()) {
+        toast({
+          status: 'error',
+          title: 'Maximum time range is 90 days',
+          variant: 'left-accent',
+          position: 'top-right',
+          duration: 4000,
+          isClosable: true,
+        });
+        return;
+      }
+
       const res = await fetch(API_HOST + "/shipper/api/tracking-list", {
         method: "POST",
         headers: {
@@ -102,7 +115,7 @@ export default function Home() {
           <Card className="mb-4">
             <CardHeader bg="gray.100" py={4}>
               <Flex justifyContent="space-between" align="center">
-                <Input value={searchQuery} placeholder="Search AWB/Order number/Phone number" w={`30%`} bg={`#fff`} onChange={(e) => setSearchQuery(e.target.value)} />
+                <Input value={searchQuery} placeholder="Search AWB/Order/Phone/Facility/Courier" w={`30%`} bg={`#fff`} onChange={(e) => setSearchQuery(e.target.value)} />
                 <Flex gap={4}>
 
                   <Flex justifyContent="flex-end" align={`center`}>
