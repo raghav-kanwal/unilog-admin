@@ -1,75 +1,21 @@
 import { AdminLayout } from '@layout'
 import { AiFillCaretDown } from "react-icons/ai";
 import React, { useEffect, useState } from 'react'
-import TableComponent from 'src/components/Table/Table'
 import { Box, Flex, Input, Menu, MenuButton, MenuItem, MenuList, Text, Button, Card, CardHeader, CardBody, useToast } from '@chakra-ui/react'
 import { Duration } from 'enums';
 import { resolveDuration } from 'utils';
+import ShipmentList from 'src/components/ShipmentList/ShipmentList';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function Home() {
-  const [searchQuery, setSearchQuery] = useState<string>('');
-
+  const queryClient = useQueryClient();
   const toast = useToast();
 
-  const [shippingList, setShippingList] = useState<any[]>([]);
   const [duration, setDuration] = useState<Duration>(Duration.LAST_WEEK);
-
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const { from, to } = resolveDuration(duration, '', '');
   const [fromDate, setFromDate] = useState<string>(from);
   const [toDate, setToDate] = useState<string>(to);
-
-  const API_HOST = "https://unilog.unicommerce.com" // "https://unilog.unicommerce.com", "http://localhost:8000"
-
-  const parseDate = (oldDate: string): string => !oldDate ? "-" : (new Date(oldDate).toLocaleDateString("en-IN", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric"
-  }));
-
-  async function fetchShipmentList() {
-    try {
-      const res = await fetch(API_HOST + "/shipper/api/tracking-list", {
-        method: "POST",
-        headers: {
-          'APP-KEY': '#$%^SK&SNLSH*^%SF'
-        },
-        body: JSON.stringify({ "search_text": searchQuery, "from": fromDate, "to": toDate })
-      });
-
-      if (!res.ok) throw new Error(res.statusText);
-
-      const data = await res.json();
-      setShippingList(data.result.tracking_records.map((row: any) => {
-        return [
-          <Box>
-            <Text>AWB: {row.tracking_number}</Text>
-            <Text>Courier: {row.shipping_source_code}</Text>
-          </Box>,
-          `${row.order_number}`,
-          <Box>
-            <Text>{row.customer_name}</Text>
-            <Text>{row.customer_phone}</Text>
-          </Box>,
-          `${row.shipping_package_code}`,
-          `${row.facility_code}`,
-          `${row.current_wismo_display_status}`,
-          <Text>{parseDate(row.order_datetime)}</Text>,
-          <Text>{parseDate(row.dispatch_datetime)}</Text>,
-          <Text>{parseDate(row.expected_delivered_datetime)}</Text>,
-          <Text>{parseDate(row.delivered_datetime)}</Text>,
-          `${row.no_of_items}`,
-          `${row.tracking_number}`
-        ]
-      }))
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-  useEffect(() => {
-    fetchShipmentList();
-  }, [])
 
   useEffect(() => {
     const { from, to } = resolveDuration(duration, fromDate, toDate);
@@ -90,13 +36,12 @@ export default function Home() {
       return;
     }
 
-    fetchShipmentList();
+    queryClient.invalidateQueries(['fetchShipmentList']);
   }
 
   return (
 
     <AdminLayout>
-
       <div className="row">
         <div className="col-md-12">
           <Card className="mb-4">
@@ -141,7 +86,7 @@ export default function Home() {
               </Flex>
             </CardHeader>
             <CardBody className="px-0 py-0" bg="white">
-              <TableComponent parseDate={parseDate} shippingList={shippingList} />
+              <ShipmentList searchText={searchQuery} duration={duration} from={fromDate} to={toDate} />
             </CardBody>
           </Card>
         </div>
