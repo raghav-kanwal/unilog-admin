@@ -4,7 +4,7 @@ import { createColumnHelper, useReactTable, getCoreRowModel, flexRender, ColumnH
 import { mapData, ShipmentListColumns as ShipmentDetailsColumns } from "./utils"
 import { Button, Center, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Flex, Text, useDisclosure } from "@chakra-ui/react";
 import ShipmentDetails from "../ShipmentDetails/ShipmentDetails";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Spinner } from "react-bootstrap";
 import { Filters } from "interfaces";
 
@@ -20,6 +20,7 @@ export default function ShipmentList({ filters }: Props) {
         queryKey: ['fetchShipmentList', filters],
         queryFn: () => fetchShipmentList(filters.searchText, filters.from, filters.to, filters.sortBy, filters.filterBy),
         refetchOnWindowFocus: false,
+        refetchInterval: (data, query) => (query.state.dataUpdateCount === 1 && data?.result?.refresh_required) ? 100 : false,
         enabled: !!filters.from?.length && !!filters.to?.length,
     });
 
