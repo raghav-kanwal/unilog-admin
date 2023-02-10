@@ -1,16 +1,22 @@
 import { AdminLayout } from '@layout'
-import { AiFillCaretDown } from "react-icons/ai";
-import React, { useEffect, useState } from 'react'
-import { Box, Flex, Input, Menu, MenuButton, MenuItem, MenuList, Text, Button, Card, CardHeader, CardBody, useToast } from '@chakra-ui/react'
-import { Duration } from 'enums';
-import { resolveDuration } from 'utils';
+import { useState } from 'react'
+import { Card, CardHeader, CardBody } from '@chakra-ui/react'
 import ShipmentList from 'src/components/ShipmentList/ShipmentList';
 import { Filters } from 'interfaces';
 import FilterBar from 'src/components/FilterBar/FilterBar';
+import { useQuery } from '@tanstack/react-query';
+import { fetchMetaData } from 'apis/get';
 
 export default function Home() {
 
-  const [filters, setFilters] = useState<Filters>({ searchText: '', from: '', to: '' });
+  const { data } = useQuery({
+    queryKey: ['fetchMetaData'],
+    queryFn: fetchMetaData,
+    refetchOnWindowFocus: false,
+    staleTime: Infinity,
+  });
+
+  const [filters, setFilters] = useState<Filters>({ searchText: '', from: '', to: '', sortBy: '', filterBy: [] });
 
   return (
 

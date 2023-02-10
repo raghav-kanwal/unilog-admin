@@ -1,5 +1,13 @@
 const baseURL = 'http://localhost:4003';
 
+export async function fetchMetaData() {
+  const res = await fetch(`${baseURL}/api/system/meta`);
+
+  if (!res.ok) throw new Error(res.statusText);
+  const text = await res.text();
+  return text ? JSON.parse(text) : {};
+}
+
 export async function fetchShipmentDetails(trackingNumber: string) {
   const res = await fetch(
     `${baseURL}/shipper/api/tracking-details?tr_number=${trackingNumber}`,

@@ -1,6 +1,9 @@
-import { Flex, Input, Button, Text, Menu, MenuButton, MenuList, MenuItem, Box, useToast } from "@chakra-ui/react";
+import { Flex, Input, Button, Text, Menu, MenuButton, MenuList, MenuItem, Box, Select, Checkbox } from "@chakra-ui/react";
+import { useQuery } from "@tanstack/react-query";
+import { fetchMetaData } from "apis/get";
 import { Duration } from "enums";
 import { Filters } from "interfaces";
+import { FaChevronDown } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { AiFillCaretDown } from "react-icons/ai";
 import { resolveDuration } from "utils";
@@ -12,13 +15,19 @@ interface Props {
 }
 
 export default function FilterBar({ filters, setFilters }: Props) {
-    const toast = useToast();
     const { from, to } = resolveDuration(Duration.LAST_WEEK, '', '');
 
     const [toDate, setToDate] = useState<string>(to);
     const [fromDate, setFromDate] = useState<string>(from);
     const [duration, setDuration] = useState<Duration>(Duration.LAST_WEEK);
     const [searchQuery, setSearchQuery] = useState<string>('');
+
+    const { data } = useQuery({
+        queryKey: ['fetchMetaData'],
+        queryFn: fetchMetaData,
+        refetchOnWindowFocus: false,
+        staleTime: Infinity,
+    });
 
     useEffect(() => {
         setFilters({
@@ -46,6 +55,38 @@ export default function FilterBar({ filters, setFilters }: Props) {
         <Flex justifyContent="space-between" align="center">
             <Input value={searchQuery} placeholder="Search AWB/Order/Phone/Facility/Courier" w={`30%`} bg={`#fff`} onChange={(e) => setSearchQuery(e.target.value)} />
             <Flex gap={4}>
+
+                <Flex align="center">
+                    <Select placeholder='Sort By' w="10rem" background="white">
+                        {
+                            data?.result?.tracking_page?.sort_by ?
+                                data.result.tracking_page.sort_by.map((
+                                    { key, display }: { key: string, display: string }) => <option key={key} value={key}>{display}</option>
+                                )
+                                : <></>
+                        }
+                    </Select>
+                </Flex>
+
+                <Flex align="center">
+                    <Menu autoSelect={false} closeOnSelect={false}>
+                        <MenuButton as={Button} rightIcon={<FaChevronDown />} background="white">
+                            <Text fontWeight="normal">Filter By</Text>
+                        </MenuButton>
+                        <MenuList>
+                            {
+                                data?.result?.tracking_page?.filters ?
+                                    data.result.tracking_page.filters.map((
+                                        { key, display }: { key: string, display: string }) =>
+                                        <MenuItem key={key}>
+                                            <Checkbox>{display}</Checkbox>
+                                        </MenuItem>
+                                    )
+                                    : <></>
+                            }
+                        </MenuList>
+                    </Menu>
+                </Flex>
 
                 <Flex justifyContent="flex-end" align={`center`}>
                     <Text as="span" mr={2}>Timeline: </Text>

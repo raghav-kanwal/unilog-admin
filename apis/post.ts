@@ -3,7 +3,9 @@ const baseURL = 'http://localhost:4003';
 export async function fetchShipmentList(
   searchText: string,
   from: string,
-  to: string
+  to: string,
+  sortBy: string,
+  filterBy: string[]
 ) {
   const days90InMiliSeconds = 90 * 24 * 60 * 60 * 1000;
 
@@ -22,6 +24,8 @@ export async function fetchShipmentList(
       search_text: searchText,
       from,
       to,
+      sort_by: sortBy,
+      filters: filterBy,
     }),
   });
 

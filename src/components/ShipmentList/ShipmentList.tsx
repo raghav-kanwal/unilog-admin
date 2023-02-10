@@ -18,7 +18,7 @@ export default function ShipmentList({ filters }: Props) {
 
     const { isLoading, isError, isFetching, data, error } = useQuery({
         queryKey: ['fetchShipmentList', filters],
-        queryFn: () => fetchShipmentList(filters.searchText, filters.from, filters.to),
+        queryFn: () => fetchShipmentList(filters.searchText, filters.from, filters.to, filters.sortBy, filters.filterBy),
         refetchOnWindowFocus: false,
         enabled: !!filters.from?.length && !!filters.to?.length,
     });
