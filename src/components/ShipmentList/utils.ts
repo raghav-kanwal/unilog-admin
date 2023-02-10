@@ -50,6 +50,5 @@ export const mapData = (data: any): ShipmentListColumns[] => {
     });
   });
 
-  console.log(mappedData);
   return mappedData;
 };

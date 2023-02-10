@@ -5,6 +5,14 @@ export async function fetchShipmentList(
   from: string,
   to: string
 ) {
+  const days90InMiliSeconds = 90 * 24 * 60 * 60 * 1000;
+
+  if (new Date(from).getTime() + days90InMiliSeconds < new Date(to).getTime())
+    throw new Error('Maximum time range is 90 days');
+
+  if (new Date(from).getTime() > new Date(to).getTime())
+    throw new Error('Invalid date range');
+
   const res = await fetch(`${baseURL}/shipper/api/tracking-list`, {
     method: 'POST',
     headers: {

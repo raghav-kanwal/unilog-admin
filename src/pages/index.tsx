@@ -19,7 +19,7 @@ export default function Home() {
         <div className="col-md-12">
           <Card className="mb-4">
             <CardHeader bg="gray.100" py={4}>
-              <FilterBar setFilters={setFilters} />
+              <FilterBar filters={filters} setFilters={setFilters} />
             </CardHeader>
             <CardBody className="px-0 py-0" bg="white">
               <ShipmentList filters={filters} />

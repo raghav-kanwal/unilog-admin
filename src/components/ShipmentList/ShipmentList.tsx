@@ -1,5 +1,4 @@
 import { fetchShipmentList } from "apis/post";
-import { Duration } from "enums";
 import { useQuery } from "@tanstack/react-query"
 import { createColumnHelper, useReactTable, getCoreRowModel, flexRender, ColumnHelper, ColumnDef } from "@tanstack/react-table"
 import { mapData, ShipmentListColumns as ShipmentDetailsColumns } from "./utils"
@@ -17,7 +16,7 @@ export default function ShipmentList({ filters }: Props) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [trackingNumber, setTrackingNumber] = useState<string | null>(null);
 
-    const { isLoading, isError, isFetching, data } = useQuery({
+    const { isLoading, isError, isFetching, data, error } = useQuery({
         queryKey: ['fetchShipmentList', filters],
         queryFn: () => fetchShipmentList(filters.searchText, filters.from, filters.to),
         refetchOnWindowFocus: false,
@@ -44,7 +43,7 @@ export default function ShipmentList({ filters }: Props) {
     })
 
     if (isLoading || isFetching) return <Center h="400px"><Spinner /></Center>
-    if (isError) return <Center h="400px">An error occurred, please try again later!</Center>
+    if (isError) return <Center h="400px">{String(error) ?? 'An error occurred, please try again later!'}</Center>
 
     return (
         <>
