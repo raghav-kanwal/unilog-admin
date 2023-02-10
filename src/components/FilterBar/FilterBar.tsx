@@ -64,11 +64,11 @@ export default function FilterBar({ filters, setFilters }: Props) {
 
     return (
         <Flex justifyContent="space-between" align="center">
-            <Input value={searchQuery} placeholder="Search AWB/Order/Phone/Facility/Courier" w={`30%`} bg={`#fff`} onChange={(e) => setSearchQuery(e.target.value)} />
+            <Input value={searchQuery} placeholder="Search AWB/Order/Phone/Facility/Courier" w={`25%`} bg={`#fff`} onChange={(e) => setSearchQuery(e.target.value)} />
             <Flex gap={4}>
 
                 <Flex align="center">
-                    <Select onChange={(ev) => setSortBy(ev.target.value)} placeholder='Sort By' w="10rem" background="white" >
+                    <Select onChange={(ev) => setSortBy(ev.target.value)} placeholder='Sort By' background="white" icon={<AiFillCaretDown fontSize="14px" />} size="sm">
                         {
                             data?.result?.tracking_page?.sort_by ?
                                 data.result.tracking_page.sort_by.map((
@@ -81,7 +81,7 @@ export default function FilterBar({ filters, setFilters }: Props) {
 
                 <Flex align="center">
                     <Menu autoSelect={false} closeOnSelect={false}>
-                        <MenuButton as={Button} rightIcon={<FaChevronDown />} background="white">
+                        <MenuButton as={Button} rightIcon={<AiFillCaretDown />} background="white" h={`2rem`} p={2} fontSize="sm">
                             <Text fontWeight="normal">Filter By</Text>
                         </MenuButton>
                         <MenuList>
@@ -101,9 +101,9 @@ export default function FilterBar({ filters, setFilters }: Props) {
 
                 <Flex justifyContent="flex-end" align={`center`}>
                     <Text as="span" mr={2}>Timeline: </Text>
-                    <Menu>
+                    <Menu autoSelect={false}>
                         <MenuButton as={Button} bg={`white`} rightIcon={<AiFillCaretDown />} w="8.5rem" h={`2rem`} p={2} fontSize="sm">
-                            {duration}
+                            <Text fontWeight="normal">{duration}</Text>
                         </MenuButton>
                         <MenuList>
                             {Object.keys(Duration).map((key, index) => (
