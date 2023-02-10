@@ -21,6 +21,8 @@ export default function FilterBar({ filters, setFilters }: Props) {
     const [fromDate, setFromDate] = useState<string>(from);
     const [duration, setDuration] = useState<Duration>(Duration.LAST_WEEK);
     const [searchQuery, setSearchQuery] = useState<string>('');
+    const [sortBy, setSortBy] = useState<string | null>(null);
+    const [filterBy, setFilterBy] = useState<string[]>([]);
 
     const { data } = useQuery({
         queryKey: ['fetchMetaData'],
@@ -34,6 +36,8 @@ export default function FilterBar({ filters, setFilters }: Props) {
             searchText: searchQuery,
             from: fromDate,
             to: toDate,
+            sortBy: sortBy,
+            filterBy: filterBy,
         })
     }, [])
 
@@ -48,7 +52,14 @@ export default function FilterBar({ filters, setFilters }: Props) {
             searchText: searchQuery,
             from: fromDate,
             to: toDate,
+            sortBy: sortBy,
+            filterBy: filterBy,
         })
+    }
+
+    const onCheckboxChange = (ev: any, key: string) => {
+        if (ev.target.checked) setFilterBy((filters) => [...filters, key]);
+        else setFilterBy((filters) => filters.filter(f => f !== key));
     }
 
     return (
@@ -57,7 +68,7 @@ export default function FilterBar({ filters, setFilters }: Props) {
             <Flex gap={4}>
 
                 <Flex align="center">
-                    <Select placeholder='Sort By' w="10rem" background="white">
+                    <Select onChange={(ev) => setSortBy(ev.target.value)} placeholder='Sort By' w="10rem" background="white" >
                         {
                             data?.result?.tracking_page?.sort_by ?
                                 data.result.tracking_page.sort_by.map((
@@ -79,7 +90,7 @@ export default function FilterBar({ filters, setFilters }: Props) {
                                     data.result.tracking_page.filters.map((
                                         { key, display }: { key: string, display: string }) =>
                                         <MenuItem key={key}>
-                                            <Checkbox>{display}</Checkbox>
+                                            <Checkbox onChange={($event) => onCheckboxChange($event, key)}>{display}</Checkbox>
                                         </MenuItem>
                                     )
                                     : <></>
