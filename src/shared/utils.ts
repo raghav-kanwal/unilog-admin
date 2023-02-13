@@ -1,4 +1,4 @@
-import { Duration } from 'enums';
+import { Duration } from 'src/shared/enums';
 
 export function resolveDuration(
   duration: Duration,

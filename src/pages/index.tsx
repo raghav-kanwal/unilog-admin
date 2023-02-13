@@ -2,7 +2,7 @@ import { AdminLayout } from '@layout'
 import { useState } from 'react'
 import { Card, CardHeader, CardBody } from '@chakra-ui/react'
 import ShipmentList from 'src/components/ShipmentList/ShipmentList';
-import { Filters } from 'interfaces';
+import { Filters } from 'src/shared/interfaces';
 import FilterBar from 'src/components/FilterBar/FilterBar';
 import { useQuery } from '@tanstack/react-query';
 import { fetchMetaData } from 'apis/get';

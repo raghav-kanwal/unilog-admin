@@ -1,7 +1,7 @@
 import { IconButton, Tooltip, useToast } from "@chakra-ui/react";
 import { TbDownload } from 'react-icons/tb';
 import * as PapaParse from 'papaparse';
-import { Filters } from "interfaces";
+import { Filters } from "src/shared/interfaces";
 import { fetchShipmentList } from "apis/post";
 
 interface Props {

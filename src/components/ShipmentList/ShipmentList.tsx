@@ -4,9 +4,9 @@ import { createColumnHelper, useReactTable, getCoreRowModel, flexRender, ColumnH
 import { mapData, ShipmentListColumns as ShipmentDetailsColumns } from "./utils"
 import { Button, Center, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Flex, Text, useDisclosure } from "@chakra-ui/react";
 import ShipmentDetails from "../ShipmentDetails/ShipmentDetails";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Spinner } from "react-bootstrap";
-import { Filters } from "interfaces";
+import { Filters } from "src/shared/interfaces";
 
 interface Props {
     filters: Filters
