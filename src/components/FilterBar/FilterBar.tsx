@@ -3,19 +3,19 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchMetaData } from "apis/get";
 import { Duration } from "src/shared/enums";
 import { Filters } from "src/shared/interfaces";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { AiFillCaretDown } from "react-icons/ai";
 import DownloadCSV from "../DownloadCSV/DownloadCSV";
 import { useDate } from "src/shared/hooks";
 
 interface Props {
     filters: Filters;
-    setFilters: Function;
+    setFilters: Dispatch<SetStateAction<Filters>>;
 }
 
 export default function FilterBar({ filters, setFilters }: Props) {
     const [searchQuery, setSearchQuery] = useState<string>('');
-    const [sortBy, setSortBy] = useState<string | null>(null);
+    const [sortBy, setSortBy] = useState<string>("");
     const [filterBy, setFilterBy] = useState<string[]>([]);
 
     const [duration, setDuration] = useState<Duration>(Duration.LAST_WEEK);
