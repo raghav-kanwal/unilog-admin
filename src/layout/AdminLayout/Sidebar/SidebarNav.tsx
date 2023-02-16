@@ -144,8 +144,8 @@ export default function SidebarNav() {
       <SidebarNavTitle>Components</SidebarNavTitle> */}
 
       <SidebarNavGroup toggleIcon={faGauge} toggleText="Dashboard">
-        <SidebarNavItem href="base/accordion.html">RTO Reports</SidebarNavItem>
-        <SidebarNavItem href="base/breadcrumb.html">Delivery Reports</SidebarNavItem>
+        <SidebarNavItem href="/comingSoon">RTO Reports</SidebarNavItem>
+        <SidebarNavItem href="/comingSoon">Delivery Reports</SidebarNavItem>
         {/* <SidebarNavItem href="base/cards.html">Cards</SidebarNavItem> */}
         {/* <SidebarNavItem href="base/carousel.html">Carousel</SidebarNavItem>
         <SidebarNavItem href="base/collapse.html">Collapse</SidebarNavItem>
@@ -162,35 +162,35 @@ export default function SidebarNav() {
       </SidebarNavGroup>
 
       <SidebarNavGroup toggleIcon={faLocationArrow} toggleText="Tracking">
-        <SidebarNavItem href="shipping_history/view">Orders</SidebarNavItem>
-        <SidebarNavItem href="buttons/button-group.html">Status Update Manual</SidebarNavItem>
+        <SidebarNavItem href="/">Orders</SidebarNavItem>
+        <SidebarNavItem href="/comingSoon">Status Update Manual</SidebarNavItem>
         {/* <SidebarNavItem href="buttons/dropdowns.html">Dropdowns</SidebarNavItem> */}
       </SidebarNavGroup>
 
       <SidebarNavGroup toggleIcon={faStar} toggleText="NDR">
-        <SidebarNavItem href="buttons/buttons.html">Responses</SidebarNavItem>
-        <SidebarNavItem href="buttons/button-group.html">Attempt Action</SidebarNavItem>
-        <SidebarNavItem href="buttons/dropdowns.html">Automate Action Rules</SidebarNavItem>
+        <SidebarNavItem href="/comingSoon">Responses</SidebarNavItem>
+        <SidebarNavItem href="/comingSoon">Attempt Action</SidebarNavItem>
+        <SidebarNavItem href="/comingSoon">Automate Action Rules</SidebarNavItem>
       </SidebarNavGroup>
 
       <SidebarNavGroup toggleIcon={faCalculator} toggleText="EDD">
-        <SidebarNavItem href="buttons/buttons.html">Upload SLA</SidebarNavItem>
-        <SidebarNavItem href="buttons/button-group.html">Configure SLA</SidebarNavItem>
+        <SidebarNavItem href="/comingSoon">Upload SLA</SidebarNavItem>
+        <SidebarNavItem href="/comingSoon">Configure SLA</SidebarNavItem>
         {/* <SidebarNavItem href="buttons/dropdowns.html">Automate Action Rules</SidebarNavItem> */}
       </SidebarNavGroup>
 
       <SidebarNavGroup toggleIcon={faPencil} toggleText="Allocation">
-        <SidebarNavItem href="buttons/buttons.html">Custom Rules</SidebarNavItem>
-        <SidebarNavItem href="buttons/button-group.html">Weightage based allocation</SidebarNavItem>
-        <SidebarNavItem href="buttons/dropdowns.html">Upload rate card</SidebarNavItem>
-        <SidebarNavItem href="buttons/dropdowns.html">Create rate card</SidebarNavItem>
+        <SidebarNavItem href="/comingSoon">Custom Rules</SidebarNavItem>
+        <SidebarNavItem href="/comingSoon">Weightage based allocation</SidebarNavItem>
+        <SidebarNavItem href="/comingSoon">Upload rate card</SidebarNavItem>
+        <SidebarNavItem href="/comingSoon">Create rate card</SidebarNavItem>
       </SidebarNavGroup>
 
       <SidebarNavGroup toggleIcon={faCog} toggleText="Settings">
-        <SidebarNavItem href="buttons/buttons.html">Courier Channel</SidebarNavItem>
-        <SidebarNavItem href="buttons/button-group.html">Tracking Theme</SidebarNavItem>
-        {/* <SidebarNavItem href="buttons/dropdowns.html">Upload rate card</SidebarNavItem>
-        <SidebarNavItem href="buttons/dropdowns.html">Create rate card</SidebarNavItem> */}
+        <SidebarNavItem href="/comingSoon">Courier Channel</SidebarNavItem>
+        <SidebarNavItem href="/comingSoon">Tracking Theme</SidebarNavItem>
+        {/* <SidebarNavItem href="/comingSoon">Upload rate card</SidebarNavItem>
+        <SidebarNavItem href="/comingSoon">Create rate card</SidebarNavItem> */}
       </SidebarNavGroup>
 
       {/* <SidebarNavItem icon={faChartPie} href="charts.html">Charts</SidebarNavItem> */}

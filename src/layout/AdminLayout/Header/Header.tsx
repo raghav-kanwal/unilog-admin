@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars } from '@fortawesome/free-solid-svg-icons'
 import Link from 'next/link'
-import Breadcrumb from '@layout/AdminLayout/Breadcrumb/Breadcrumb'
+import BreadcrumbComponent from '@layout/AdminLayout/Breadcrumb/Breadcrumb'
 import HeaderFeaturedNav from '@layout/AdminLayout/Header/HeaderFeaturedNav'
 import HeaderNotificationNav from '@layout/AdminLayout/Header/HeaderNotificationNav'
 import HeaderProfileNav from '@layout/AdminLayout/Header/HeaderProfileNav'
@@ -52,7 +52,7 @@ export default function Header(props: HeaderProps) {
       </Container>
       <div className="header-divider border-top my-2 ms-n2 me-n2" />
       <Container fluid>
-        <Breadcrumb />
+        <BreadcrumbComponent />
       </Container>
     </header>
   )
