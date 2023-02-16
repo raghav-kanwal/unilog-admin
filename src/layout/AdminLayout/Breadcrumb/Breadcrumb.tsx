@@ -39,7 +39,6 @@ export default function BreadcrumbComponent() {
   }
 
   const breadcrumbs = generateBreadcrumbs();
-  debugger;
 
   return (
     

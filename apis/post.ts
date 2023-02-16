@@ -1,4 +1,4 @@
-const baseURL = 'http://localhost:4003';
+const baseURL = 'https://unilog.unicommerce.com';
 
 export async function fetchShipmentList(
   searchText: string,
