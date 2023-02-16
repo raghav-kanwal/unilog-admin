@@ -1,28 +1,25 @@
 import { Flex, Input, Button, Text, Menu, MenuButton, MenuList, MenuItem, Box, Select, Checkbox } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchMetaData } from "apis/get";
-import { Duration } from "enums";
-import { Filters } from "interfaces";
-import { FaChevronDown } from "react-icons/fa";
-import { useEffect, useState } from "react";
+import { Duration } from "src/shared/enums";
+import { Filters } from "src/shared/interfaces";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { AiFillCaretDown } from "react-icons/ai";
-import { resolveDuration } from "utils";
 import DownloadCSV from "../DownloadCSV/DownloadCSV";
+import { useDate } from "src/shared/hooks";
 
 interface Props {
     filters: Filters;
-    setFilters: Function;
+    setFilters: Dispatch<SetStateAction<Filters>>;
 }
 
 export default function FilterBar({ filters, setFilters }: Props) {
-    const { from, to } = resolveDuration(Duration.LAST_WEEK, '', '');
-
-    const [toDate, setToDate] = useState<string>(to);
-    const [fromDate, setFromDate] = useState<string>(from);
-    const [duration, setDuration] = useState<Duration>(Duration.LAST_WEEK);
     const [searchQuery, setSearchQuery] = useState<string>('');
-    const [sortBy, setSortBy] = useState<string | null>(null);
+    const [sortBy, setSortBy] = useState<string>("");
     const [filterBy, setFilterBy] = useState<string[]>([]);
+
+    const [duration, setDuration] = useState<Duration>(Duration.LAST_WEEK);
+    const { fromDate, toDate, setFromDate, setToDate } = useDate(duration);
 
     const { data } = useQuery({
         queryKey: ['fetchMetaData'],
@@ -40,12 +37,6 @@ export default function FilterBar({ filters, setFilters }: Props) {
             filterBy: filterBy,
         })
     }, [])
-
-    useEffect(() => {
-        const { from, to } = resolveDuration(duration, fromDate, toDate);
-        setFromDate(from);
-        setToDate(to);
-    }, [duration])
 
     const onSearch = () => {
         setFilters({
