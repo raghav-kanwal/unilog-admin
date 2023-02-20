@@ -45,9 +45,9 @@ export default function BreadcrumbComponent() {
     <Breadcrumb>
       
     {
-      breadcrumbs.map(el => {
+      breadcrumbs.map((el, i) => {
         return (
-          <BreadcrumbItem>
+          <BreadcrumbItem key={i}>
             <BreadcrumbLink href={el.href}>{el.title}</BreadcrumbLink>
           </BreadcrumbItem>
         )

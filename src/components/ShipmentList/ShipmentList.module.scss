@@ -1,0 +1,33 @@
+.shipmentListContainer {
+    max-height: 500px;
+    overflow: auto;
+}
+
+.shipmentListTable {
+    thead {
+        tr {
+            border-bottom: 1px solid var(--chakra-colors-gray-100);
+            th {
+                border-right: 1px solid var(--chakra-colors-gray-100);
+                font-size: var(--chakra-fontSizes-xs);
+                padding: var(--chakra-space-2);
+                &:last-child {
+                    border-right: none;
+                }
+            }
+        }
+    }
+    tbody {
+        font-size: var(--chakra-fontSizes-xs);
+        tr {
+            border-bottom: 1px solid var(--chakra-colors-gray-100);
+            td {
+                border-right: 1px solid var(--chakra-colors-gray-100);
+                padding: var(--chakra-space-2);
+                &:last-child {
+                    border-right: none;
+                }
+            }
+        }
+    }
+}

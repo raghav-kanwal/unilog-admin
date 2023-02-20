@@ -1,4 +1,5 @@
-const baseURL = 'https://unilog.unicommerce.com';
+// const baseURL = 'https://unilog.unicommerce.com';
+const baseURL = 'http://localhost:4003';
 
 export async function fetchMetaData() {
   const res = await fetch(`${baseURL}/api/system/meta`);

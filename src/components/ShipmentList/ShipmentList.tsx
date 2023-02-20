@@ -7,6 +7,7 @@ import ShipmentDetails from "../ShipmentDetails/ShipmentDetails";
 import { useMemo, useState } from "react";
 import { Spinner } from "react-bootstrap";
 import { Filters } from "src/shared/interfaces";
+import styles from './ShipmentList.module.scss';
 
 interface Props {
     filters: Filters
@@ -48,8 +49,8 @@ export default function ShipmentList({ filters }: Props) {
 
     return (
         <>
-            <div>
-                <table>
+            <div className={styles.shipmentListContainer}>
+                <table className={styles.shipmentListTable}>
                     <thead>
                         {table.getHeaderGroups().map((headerGroup) => (
                             <tr key={headerGroup.id}>
@@ -104,15 +105,15 @@ export default function ShipmentList({ filters }: Props) {
                 <DrawerOverlay transform="none !important" />
                 <DrawerContent transform="none !important">
                     <DrawerCloseButton />
-                    <DrawerHeader py={2}>Shipment Details</DrawerHeader>
+                    <DrawerHeader py={2} px={4} bg={`gray.100`}>Shipment Details</DrawerHeader>
 
                     <DrawerBody>
                         {trackingNumber ? <ShipmentDetails trackingNumber={trackingNumber} /> : <Center h="100%"><Spinner /></Center>}
                     </DrawerBody>
 
-                    <DrawerFooter justifyContent="flex-start" borderTop="1px solid var(--chakra-colors-gray-200)">
+                    <DrawerFooter justifyContent="flex-start" borderTop="1px solid var(--chakra-colors-gray-200)" py={2} px={4} bg={`gray.100`}>
                         <Flex justify="flex-start">
-                            <Button variant='outline' onClick={hideShipmentDetails} size="sm" h={`28px`}>
+                            <Button bg={`white`} variant='outline' onClick={hideShipmentDetails} size="sm" h={`28px`}>
                                 Close
                             </Button>
                         </Flex>
@@ -180,8 +181,8 @@ function createColumns(columnHelper: ColumnHelper<ShipmentDetailsColumns>, callb
             header: 'Delivery Date',
         }),
         columnHelper.accessor('attempts', {
-            cell: (info) => info.getValue(),
-            header: 'No. of Attempts',
+            cell: (info) => <Text as="p" textAlign="right">{info.getValue()}</Text>,
+            header: (info) => 'No. of Attempts',
         }),
         columnHelper.display({
             id: "actions",

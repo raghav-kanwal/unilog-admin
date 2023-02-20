@@ -1,6 +1,6 @@
 import { AdminLayout } from '@layout'
 import { useState } from 'react'
-import { Card, CardHeader, CardBody } from '@chakra-ui/react'
+import { Card, CardHeader, CardBody, useDisclosure } from '@chakra-ui/react'
 import ShipmentList from 'src/components/ShipmentList/ShipmentList';
 import { Filters } from 'src/shared/interfaces';
 import FilterBar from 'src/components/FilterBar/FilterBar';
@@ -17,7 +17,7 @@ export default function Home() {
   });
 
   const [filters, setFilters] = useState<Filters>({ searchText: '', from: '', to: '', sortBy: '', filterBy: [] });
-
+  
   return (
 
     <AdminLayout>
