@@ -16,3 +16,19 @@ export function useDate(duration: Duration) {
 
   return { fromDate, toDate, setFromDate, setToDate };
 }
+
+export function useDeviations(sortBy: string, filterBy: string[], duration: Duration): number {
+
+  const [deviations, setDeviations] = useState<number>(0);
+
+  useEffect(() => {
+    let devs = 0;
+    if(duration !== Duration.LAST_WEEK) ++devs;
+    if(sortBy !== '') ++devs;
+    if(filterBy.length !== 0) ++devs;
+
+    setDeviations(devs);
+  }, [duration, sortBy, filterBy]);
+
+  return deviations;
+}
