@@ -83,11 +83,6 @@ export default function FilterBar({ filters, setFilters }: Props) {
                                 : <></> 
                         }
                     </Button>
-                    { 
-                        (deviations > 0) 
-                            ? <Button colorScheme="teal" size="sm"><Text as="span" onClick={clearFilters}>Clear filters</Text></Button> 
-                            : <></> 
-                    }
                     <DownloadCSV filters={filters} />
                     <Button colorScheme="teal" size="sm" onClick={onSearch}>Search</Button>
                 </Flex>
@@ -99,6 +94,11 @@ export default function FilterBar({ filters, setFilters }: Props) {
                     <DrawerHeader py={2} px={4} bg={`gray.100`}>Filter Records</DrawerHeader>
 
                     <DrawerBody>
+                    { 
+                        (deviations > 0) 
+                            ? <Button mb={2} colorScheme="teal" size="sm"><Text as="span" onClick={clearFilters}>Reset All</Text></Button> 
+                            : <></> 
+                    }
                     <Flex align="flex-start" flexDir="column">
                         <Text mb={2} as="p" fontSize="sm">Sort by: </Text>
                         <Select mb={4} w={`auto`} onChange={(ev) => setSortBy(ev.target.value)} placeholder='Sort By' background="white" icon={<AiFillCaretDown fontSize="14px" />} size="sm" defaultValue={sortBy}>

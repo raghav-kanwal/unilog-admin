@@ -57,7 +57,7 @@ export default function Header(props: HeaderProps) {
           <HeaderNotificationNav />
         </div> */}
         <Box className='header-nav' ml='auto'>
-          <Text>Welcome{data.tenant ? `, ${data.tenant}!` : ``}</Text>
+          <Text>Welcome{data?.tenant ? `, ${data.tenant}!` : ``}</Text>
         </Box>
         <Box className="header-nav ms-2">
           <HeaderProfileNav />
