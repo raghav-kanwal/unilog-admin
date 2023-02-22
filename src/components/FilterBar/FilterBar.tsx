@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchMetaData } from "apis/get";
 import { Duration } from "src/shared/enums";
 import { Filters } from "src/shared/interfaces";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, KeyboardEvent, SetStateAction, useEffect, useState } from "react";
 import { AiFillCaretDown } from "react-icons/ai";
 import DownloadCSV from "../DownloadCSV/DownloadCSV";
 import { useDate, useDeviations } from "src/shared/hooks";
@@ -73,7 +73,7 @@ export default function FilterBar({ filters, setFilters }: Props) {
     return (
         <>
             <Flex justifyContent="space-between" align="center">
-                <Input value={searchQuery} placeholder="Search AWB/Order/Phone/Facility/Courier" w={`25%`} bg={`#fff`} onChange={(e) => setSearchQuery(e.target.value)} />
+                <Input value={searchQuery} placeholder="Search AWB/Order/Phone/Facility/Courier" w={`25%`} bg={`#fff`} onChange={(e) => setSearchQuery(e.target.value)} onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => e.key === 'Enter' && onSearch()} />
                 <Flex gap={4}>
                     <Button colorScheme="teal" size="sm" onClick={onOpen}>
                         <Text as="span">Filter Records</Text>
