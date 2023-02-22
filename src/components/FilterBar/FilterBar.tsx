@@ -94,47 +94,47 @@ export default function FilterBar({ filters, setFilters }: Props) {
                     <DrawerHeader py={2} px={4} bg={`gray.100`}>Filter Records</DrawerHeader>
 
                     <DrawerBody>
-                    { 
-                        (deviations > 0) 
-                            ? <Button mb={2} colorScheme="teal" size="sm"><Text as="span" onClick={clearFilters}>Reset All</Text></Button> 
-                            : <></> 
-                    }
-                    <Flex align="flex-start" flexDir="column">
-                        <Text mb={2} as="p" fontSize="sm">Sort by: </Text>
-                        <Select mb={4} w={`auto`} onChange={(ev) => setSortBy(ev.target.value)} placeholder='Sort By' background="white" icon={<AiFillCaretDown fontSize="14px" />} size="sm" defaultValue={sortBy}>
-                            {
-                                data?.result?.tracking_page?.sort_by ?
-                                    data.result.tracking_page.sort_by.map((
-                                        { key, display }: { key: string, display: string }) => <option key={key} value={key}>{display}</option>
-                                    )
-                                    : <></>
-                            }
-                        </Select>
-                    </Flex>
-
-                    <Flex align="flex-start" flexDir="column">
-                        <Text mb={2} as="p" fontSize="sm">Filter by: {filterBy.map((key: string, i: number) => <Tag mr={2} key={i}>{data?.result?.tracking_page?.filters?.find((filter: {key: string, display: string}) => filter.key === key).display}</Tag>)}</Text>
-                        <Menu autoSelect={false} closeOnSelect={false}>
-                            <MenuButton mb={4} background="white" fontSize="sm">
-                                <Flex align="center" justifyContent="space-between" fontWeight="normal" className={styles.filterByButton}>
-                                    {!!filterBy.length ? `${filterBy.length} Selected` : <Text as="span">Select filters</Text> }
-                                    <AiFillCaretDown fontSize="14px" />
-                                </Flex>
-                            </MenuButton>
-                            <MenuList>
+                        { 
+                            (deviations > 0) 
+                                ? <Button mb={2} colorScheme="teal" size="sm"><Text as="span" onClick={clearFilters}>Reset All</Text></Button> 
+                                : <></> 
+                        }
+                        <Flex align="flex-start" flexDir="column">
+                            <Text mb={2} as="p" fontSize="sm">Sort by: </Text>
+                            <Select mb={4} w={`auto`} onChange={(ev) => setSortBy(ev.target.value)} placeholder='Sort By' background="white" icon={<AiFillCaretDown fontSize="14px" />} size="sm" defaultValue={sortBy}>
                                 {
-                                    data?.result?.tracking_page?.filters ?
-                                        data.result.tracking_page.filters.map((
-                                            { key, display }: { key: string, display: string }) =>
-                                            <MenuItem key={key}>
-                                                <Checkbox isChecked={filterBy.includes(key)} onChange={($event) => onCheckboxChange($event, key)}>{display}</Checkbox>
-                                            </MenuItem>
+                                    data?.result?.tracking_page?.sort_by ?
+                                        data.result.tracking_page.sort_by.filter(({ hidden }: { hidden: Boolean}) => !hidden).map((
+                                            { key, display }: { key: string, display: string }) => <option key={key} value={key}>{display}</option>
                                         )
                                         : <></>
                                 }
-                            </MenuList>
-                        </Menu>
-                    </Flex>
+                            </Select>
+                        </Flex>
+
+                        <Flex align="flex-start" flexDir="column">
+                            <Text mb={2} as="p" fontSize="sm">Filter by: {filterBy.map((key: string, i: number) => <Tag mr={2} key={i}>{data?.result?.tracking_page?.filters?.find((filter: {key: string, display: string}) => filter.key === key).display}</Tag>)}</Text>
+                            <Menu autoSelect={false} closeOnSelect={false}>
+                                <MenuButton mb={4} background="white" fontSize="sm">
+                                    <Flex align="center" justifyContent="space-between" fontWeight="normal" className={styles.filterByButton}>
+                                        {!!filterBy.length ? `${filterBy.length} Selected` : <Text as="span">Select filters</Text> }
+                                        <AiFillCaretDown fontSize="14px" />
+                                    </Flex>
+                                </MenuButton>
+                                <MenuList>
+                                    {
+                                        data?.result?.tracking_page?.filters ?
+                                            data.result.tracking_page.filters.filter(({ hidden }: { hidden: Boolean}) => !hidden).map((
+                                                { key, display }: { key: string, display: string }) =>
+                                                <MenuItem key={key}>
+                                                    <Checkbox isChecked={filterBy.includes(key)} onChange={($event) => onCheckboxChange($event, key)}>{display}</Checkbox>
+                                                </MenuItem>
+                                            )
+                                            : <></>
+                                    }
+                                </MenuList>
+                            </Menu>
+                        </Flex>
 
                         <Flex align="center" flexDir="row">
                             <Text mr={2}>Timeline: </Text>
