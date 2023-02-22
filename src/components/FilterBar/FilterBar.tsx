@@ -1,6 +1,6 @@
 import { Flex, Input, Button, Menu, MenuButton, MenuList, MenuItem, Box, Select, Checkbox, useDisclosure, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Text, Tag } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
-import { fetchMetaData } from "apis/get";
+import { fetchExtendedMetaData, fetchMetaData } from "apis/get";
 import { Duration } from "src/shared/enums";
 import { Filters } from "src/shared/interfaces";
 import { Dispatch, KeyboardEvent, SetStateAction, useEffect, useState } from "react";
@@ -8,6 +8,8 @@ import { AiFillCaretDown } from "react-icons/ai";
 import DownloadCSV from "../DownloadCSV/DownloadCSV";
 import { useDate, useDeviations } from "src/shared/hooks";
 import styles from './filterBar.module.scss';
+import { CustomFieldProps, CustomFieldValues } from "./types";
+import Field from "../FormFields";
 
 interface Props {
     filters: Filters;
@@ -22,6 +24,8 @@ export default function FilterBar({ filters, setFilters }: Props) {
     const [duration, setDuration] = useState<Duration>(Duration.LAST_WEEK);
     const { fromDate, toDate, setFromDate, setToDate } = useDate(duration);
 
+    const [customFieldValues, setCustomFieldValues] = useState<CustomFieldValues[]>([]);
+
     const deviations: number = useDeviations(sortBy, filterBy, duration);
 
     const { onOpen, isOpen, onClose } = useDisclosure();
@@ -33,6 +37,13 @@ export default function FilterBar({ filters, setFilters }: Props) {
         staleTime: Infinity,
     });
 
+    const { data: extendedMetaData } = useQuery({
+        queryKey: ['extendedMetaData'],
+        queryFn: fetchExtendedMetaData,
+        refetchOnWindowFocus: false,
+        staleTime: Infinity,
+    })
+    
     useEffect(() => {
         setFilters({
             searchText: searchQuery,
@@ -136,8 +147,25 @@ export default function FilterBar({ filters, setFilters }: Props) {
                             </Menu>
                         </Flex>
 
+                        { 
+                            extendedMetaData 
+                                ? (
+                                    extendedMetaData.result?.extended_meta?.group_search_criteria.filter(({ hidden }: { hidden: Boolean}) => !hidden).map((props: any) => {return {...props, _key: props.key}}).map(
+                                        (props: CustomFieldProps) => {
+                                            return (
+                                                <Flex align="flex-start" flexDir="column" key={props._key}>
+                                                    <Text mb={2} as="p" fontSize="sm">{props.display_name}:</Text>
+                                                    <Field {...props} setValues={setCustomFieldValues} />
+                                                </Flex>
+                                            )
+                                        }
+                                    )
+                                )
+                                : <></>
+                        }
+
                         <Flex align="center" flexDir="row">
-                            <Text mr={2}>Timeline: </Text>
+                            <Text as="p" fontSize="sm" mr={2}>Timeline: </Text>
                             <Menu autoSelect={false}>
                                 <MenuButton as={Button} px={3} rightIcon={<AiFillCaretDown />} w="8.5rem" h={`2rem`} p={2} fontSize="sm">
                                     <Text fontWeight="normal" p={0}>{duration}</Text>

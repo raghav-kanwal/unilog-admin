@@ -1,5 +1,5 @@
-// const baseURL = 'https://unilog.unicommerce.com';
-const baseURL = 'http://localhost:4003';
+const baseURL = 'https://unilog.unicommerce.com';
+// const baseURL = 'http://localhost:4003';
 
 export async function fetchShipmentList(
   searchText: string,
