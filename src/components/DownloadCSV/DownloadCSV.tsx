@@ -8,12 +8,12 @@ interface Props {
     filters: Filters
 }
 
-export default function DownloadCSV({ filters: { searchText, from, to, sortBy, filterBy } }: Props) {
+export default function DownloadCSV({ filters: { searchText, from, to, sortBy, filterBy, customFieldValues } }: Props) {
     const toast = useToast();
 
     const handleCSVDownload = async () => {
         try {
-            const data = await fetchShipmentList(searchText, from, to, sortBy, filterBy);
+            const data = await fetchShipmentList(searchText, from, to, sortBy, filterBy, customFieldValues);
             const csv = PapaParse.unparse(data.result.tracking_records);
             const blob = new Blob([csv], { type: "text/csv" });
             const a = document.createElement("a");

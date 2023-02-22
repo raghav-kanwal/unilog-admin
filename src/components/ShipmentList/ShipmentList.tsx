@@ -19,7 +19,7 @@ export default function ShipmentList({ filters }: Props) {
 
     const { isLoading, isError, isFetching, data, error } = useQuery({
         queryKey: ['fetchShipmentList', filters],
-        queryFn: () => fetchShipmentList(filters.searchText, filters.from, filters.to, filters.sortBy, filters.filterBy),
+        queryFn: () => fetchShipmentList(filters.searchText, filters.from, filters.to, filters.sortBy, filters.filterBy, filters.customFieldValues),
         refetchOnWindowFocus: false,
         refetchInterval: (data, query) => (query.state.dataUpdateCount === 1 && data?.result?.refresh_required) ? 100 : false,
         enabled: !!filters.from?.length && !!filters.to?.length,

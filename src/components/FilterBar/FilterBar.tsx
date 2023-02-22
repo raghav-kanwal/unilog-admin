@@ -51,6 +51,7 @@ export default function FilterBar({ filters, setFilters }: Props) {
             to: toDate,
             sortBy: sortBy,
             filterBy: filterBy,
+            customFieldValues,
         })
     }, [])
 
@@ -61,6 +62,7 @@ export default function FilterBar({ filters, setFilters }: Props) {
             to: toDate,
             sortBy: sortBy,
             filterBy: filterBy,
+            customFieldValues,
         })
     }
 
