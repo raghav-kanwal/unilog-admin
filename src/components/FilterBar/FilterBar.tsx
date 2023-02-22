@@ -63,6 +63,13 @@ export default function FilterBar({ filters, setFilters }: Props) {
         onSearch();
     }
 
+    const clearFilters = () => {
+        setSortBy('');
+        setFilterBy([]);
+        setDuration(Duration.LAST_WEEK);
+        onSearch();
+    }
+
     return (
         <>
             <Flex justifyContent="space-between" align="center">
@@ -76,6 +83,11 @@ export default function FilterBar({ filters, setFilters }: Props) {
                                 : <></> 
                         }
                     </Button>
+                    { 
+                        (deviations > 0) 
+                            ? <Button colorScheme="teal" size="sm"><Text as="span" onClick={clearFilters}>Clear filters</Text></Button> 
+                            : <></> 
+                    }
                     <DownloadCSV filters={filters} />
                     <Button colorScheme="teal" size="sm" onClick={onSearch}>Search</Button>
                 </Flex>
