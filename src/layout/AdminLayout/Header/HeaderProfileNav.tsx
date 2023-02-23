@@ -45,43 +45,13 @@ export default function HeaderProfileNav() {
         </Dropdown.Toggle>
         <Dropdown.Menu className="pt-0">
           <Dropdown.Header className="bg-light fw-bold rounded-top">Account</Dropdown.Header>
-          <Link href="/" passHref legacyBehavior>
-            <Dropdown.Item>
-              <ProfileDropdownItem icon={faListCheck}>
-                Tasks
-              </ProfileDropdownItem>
-            </Dropdown.Item>
-          </Link>
-          <Link href="/" passHref legacyBehavior>
-            <Dropdown.Item>
-              <ProfileDropdownItem icon={faMessage}>
-                Messages
-              </ProfileDropdownItem>
-            </Dropdown.Item>
-          </Link>
 
-          <Dropdown.Header className="bg-light fw-bold">Settings</Dropdown.Header>
-          <Link href="/" passHref legacyBehavior>
+          <Link href="/admin" passHref legacyBehavior>
             <Dropdown.Item>
               <ProfileDropdownItem icon={faUser}>Profile</ProfileDropdownItem>
             </Dropdown.Item>
           </Link>
-          <Link href="/" passHref legacyBehavior>
-            <Dropdown.Item>
-              <ProfileDropdownItem icon={faGear}>Settings</ProfileDropdownItem>
-            </Dropdown.Item>
-          </Link>
-          <Link href="/" passHref legacyBehavior>
-            <Dropdown.Item>
-              <ProfileDropdownItem icon={faCreditCard}>Payments</ProfileDropdownItem>
-            </Dropdown.Item>
-          </Link>
-          <Link href="/" passHref legacyBehavior>
-            <Dropdown.Item>
-              <ProfileDropdownItem icon={faFile}>Projects</ProfileDropdownItem>
-            </Dropdown.Item>
-          </Link>
-
+    
           <Dropdown.Divider />
 
           <Link href="/admin/logout" passHref legacyBehavior>
