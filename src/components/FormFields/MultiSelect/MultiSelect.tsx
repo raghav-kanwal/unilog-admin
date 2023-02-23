@@ -27,7 +27,7 @@ export default function MultiSelect({ _key, default_value, values, setValues }: 
     
     return (
         <Menu autoSelect={false} closeOnSelect={false}>
-            <MenuButton mb={4} background="white" fontSize="sm">
+            <MenuButton background="white" fontSize="sm">
                 <Flex align="center" justifyContent="space-between" fontWeight="normal" className={styles.filterByButton}>
                     {!!options.length ? `${options.length} Selected` : <Text as="span">Select options</Text> }
                     <AiFillCaretDown fontSize="14px" />
