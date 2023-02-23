@@ -24,7 +24,12 @@ export function resolveDuration(
   }
 
   return {
-    from: fromDate.toLocaleDateString('en-CA'),
-    to: toDate.toLocaleDateString('en-CA'),
+    from: getFormattedDate(fromDate),
+    to: getFormattedDate(toDate),
   };
+}
+
+// returns in YYYY-MM-DD format
+function getFormattedDate(date: Date): string {
+  return date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0');
 }

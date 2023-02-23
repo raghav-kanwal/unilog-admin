@@ -16,7 +16,7 @@ export default function Home() {
     staleTime: Infinity,
   });
 
-  const [filters, setFilters] = useState<Filters>({ searchText: '', from: '', to: '', sortBy: '', filterBy: [] });
+  const [filters, setFilters] = useState<Filters>({ searchText: '', from: '', to: '', sortBy: '', filterBy: [], customFieldValues: []});
   
   return (
 

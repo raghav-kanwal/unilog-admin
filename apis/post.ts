@@ -1,12 +1,15 @@
-// const baseURL = 'https://unilog.unicommerce.com';
-const baseURL = 'http://localhost:4003';
+import { CustomFieldValues } from "src/components/FilterBar/types";
+
+const baseURL = 'https://unilog.unicommerce.com';
+// const baseURL = 'http://localhost:4003';
 
 export async function fetchShipmentList(
   searchText: string,
   from: string,
   to: string,
   sortBy: string,
-  filterBy: string[]
+  filterBy: string[],
+  customFieldValues: CustomFieldValues[],
 ) {
   const days90InMiliSeconds = 90 * 24 * 60 * 60 * 1000;
 
@@ -15,6 +18,11 @@ export async function fetchShipmentList(
 
   if (new Date(from).getTime() > new Date(to).getTime())
     throw new Error('Invalid date range');
+
+  let group_search_criteria: any = {};
+  customFieldValues.forEach(field => {
+    group_search_criteria[field._key] = field.value;
+  })
 
   const res = await fetch(`${baseURL}/shipper/api/tracking-list`, {
     method: 'POST',
@@ -27,6 +35,7 @@ export async function fetchShipmentList(
       to,
       sort_by: sortBy,
       filters: filterBy,
+      group_search_criteria,
     }),
   });
 
