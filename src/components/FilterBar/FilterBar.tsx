@@ -86,7 +86,7 @@ export default function FilterBar({ filters, setFilters }: Props) {
     return (
         <>
             <Flex justifyContent="space-between" align="center">
-                <Input value={searchQuery} placeholder="Search AWB/Order/Phone/Facility/Courier" w={`25%`} bg={`#fff`} onChange={(e) => setSearchQuery(e.target.value)} onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => e.key === 'Enter' && onSearch()} />
+                <Input value={searchQuery} placeholder="Search AWB/Order/Phone/Facility/Courier" w={`40%`} bg={`#fff`} onChange={(e) => setSearchQuery(e.target.value)} onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => e.key === 'Enter' && onSearch()} />
                 <Flex gap={4}>
                     <Button colorScheme="teal" size="sm" onClick={onOpen}>
                         <Text as="span">Filter Records</Text>
@@ -157,7 +157,7 @@ export default function FilterBar({ filters, setFilters }: Props) {
                                             return (
                                                 <Flex align="flex-start" flexDir="column" key={props._key}>
                                                     <Text mb={2} as="p" fontSize="sm">{props.display_name}:</Text>
-                                                    <Field {...props} setValues={setCustomFieldValues} />
+                                                    <Field {...props} values={customFieldValues} setValues={setCustomFieldValues} />
                                                 </Flex>
                                             )
                                         }
