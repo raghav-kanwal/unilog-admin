@@ -3,6 +3,7 @@ import { CustomFieldProps, CustomFieldValues, FieldType } from '../FilterBar/typ
 import MultiSelect from './MultiSelect/MultiSelect'
 
 interface Props extends CustomFieldProps {
+    values: CustomFieldValues[],
     setValues: Dispatch<SetStateAction<CustomFieldValues[]>>
 }
 

@@ -5,11 +5,12 @@ import { CustomFieldProps, CustomFieldValues } from '../../FilterBar/types'
 import styles from "./MultiSelect.module.scss"
 
 interface Props extends CustomFieldProps {
+    values: CustomFieldValues[],
     setValues: Dispatch<SetStateAction<CustomFieldValues[]>>
 }
 
-export default function MultiSelect({ _key, default_value, setValues }: Props) {
-    const [options, setOptions] = useState<string[]>([]);
+export default function MultiSelect({ _key, default_value, values, setValues }: Props) {
+    const [options, setOptions] = useState<string[]>(values.find(v => v.type === 'multi_select' && v._key === _key)?.value as string[] || []);
 
     useEffect(() => {
         setValues((values) => {

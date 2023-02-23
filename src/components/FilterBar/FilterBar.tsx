@@ -157,7 +157,7 @@ export default function FilterBar({ filters, setFilters }: Props) {
                                             return (
                                                 <Flex align="flex-start" flexDir="column" key={props._key}>
                                                     <Text mb={2} as="p" fontSize="sm">{props.display_name}:</Text>
-                                                    <Field {...props} setValues={setCustomFieldValues} />
+                                                    <Field {...props} values={customFieldValues} setValues={setCustomFieldValues} />
                                                 </Flex>
                                             )
                                         }
