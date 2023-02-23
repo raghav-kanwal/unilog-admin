@@ -126,7 +126,7 @@ export default function FilterBar({ filters, setFilters }: Props) {
                         </Flex>
 
                         <Flex align="flex-start" flexDir="column">
-                            <Text mb={2} as="p" fontSize="sm">Filter by: {filterBy.map((key: string, i: number) => <Tag mr={2} key={i}>{data?.result?.tracking_page?.filters?.find((filter: {key: string, display: string}) => filter.key === key).display}</Tag>)}</Text>
+                            <Text mb={2} as="p" fontSize="sm">Filter by: {filterBy.map((key: string, i: number) => <Tag mr={2} key={i}>{data?.result?.tracking_page?.status_filters?.find((filter: {key: string, display: string}) => filter.key === key).display}</Tag>)}</Text>
                             <Menu autoSelect={false} closeOnSelect={false}>
                                 <MenuButton mb={4} background="white" fontSize="sm">
                                     <Flex align="center" justifyContent="space-between" fontWeight="normal" className={styles.filterByButton}>
@@ -136,8 +136,8 @@ export default function FilterBar({ filters, setFilters }: Props) {
                                 </MenuButton>
                                 <MenuList>
                                     {
-                                        data?.result?.tracking_page?.filters ?
-                                            data.result.tracking_page.filters.filter(({ hidden }: { hidden: Boolean}) => !hidden).map((
+                                        data?.result?.tracking_page?.status_filters ?
+                                            data.result.tracking_page.status_filters.filter(({ hidden }: { hidden: Boolean}) => !hidden).map((
                                                 { key, display }: { key: string, display: string }) =>
                                                 <MenuItem key={key}>
                                                     <Checkbox isChecked={filterBy.includes(key)} onChange={($event) => onCheckboxChange($event, key)}>{display}</Checkbox>
