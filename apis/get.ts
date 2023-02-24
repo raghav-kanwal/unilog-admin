@@ -2,7 +2,11 @@ const baseURL = 'https://unilog.unicommerce.com';
 // const baseURL = 'http://localhost:4003';
 
 export async function fetchMetaData() {
-  const res = await fetch(`${baseURL}/api/system/meta`);
+  const res = await fetch(`${baseURL}/api/system/meta`, {
+    headers: {
+      'APP-KEY': '#$%^SK&SNLSH*^%SF',
+    },
+  });
 
   if (!res.ok) throw new Error(res.statusText);
   const text = await res.text();

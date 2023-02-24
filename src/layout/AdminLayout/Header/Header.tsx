@@ -9,6 +9,7 @@ import { Button, Container } from 'react-bootstrap'
 import { Box, Text } from '@chakra-ui/react'
 import { useQuery } from '@tanstack/react-query'
 import { fetchMetaData } from 'apis/get'
+import { use, useEffect, useState } from 'react'
 
 type HeaderProps = {
   toggleSidebar: () => void;
@@ -17,13 +18,18 @@ type HeaderProps = {
 
 export default function Header(props: HeaderProps) {
   const { toggleSidebar, toggleSidebarMd } = props
+  const [userName, setUserName] = useState<string>('');
 
   const { data } = useQuery({
     queryKey: ['fetchMetaData'],
     queryFn: fetchMetaData,
     refetchOnWindowFocus: false,
     staleTime: Infinity,
-});
+  });
+
+  useEffect(() => {
+    if(data?.result?.tenant_profile?.user_name) setUserName(data.result.tenant_profile.user_name);
+  }, [data])
 
   return (
     <header className="header sticky-top mb-3 p-2 border-bottom">
@@ -57,7 +63,7 @@ export default function Header(props: HeaderProps) {
           <HeaderNotificationNav />
         </div> */}
         <Box className='header-nav' ml='auto'>
-          <Text>Welcome{data?.tenant ? `, ${data.tenant}!` : ``}</Text>
+          {userName ? <>Welcome, <Text as='span' fontWeight="bold">{userName}</Text>!</> : <>Welcome</>}
         </Box>
         <Box className="header-nav ms-2">
           <HeaderProfileNav />

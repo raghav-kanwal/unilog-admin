@@ -112,9 +112,9 @@ export default function FilterBar({ filters, setFilters }: Props) {
                                 ? <Button mb={2} colorScheme="teal" size="sm"><Text as="span" onClick={clearFilters}>Reset All</Text></Button> 
                                 : <></> 
                         }
-                        <Flex align="flex-start" flexDir="column">
-                            <Text mb={2} as="p" fontSize="sm">Sort by: </Text>
-                            <Select mb={4} w={`auto`} onChange={(ev) => setSortBy(ev.target.value)} placeholder='Sort By' background="white" icon={<AiFillCaretDown fontSize="14px" />} size="sm" defaultValue={sortBy}>
+                        <Flex align="center" gap={2} mb={4}>
+                            <Text as="p" fontSize="sm">Sort by: </Text>
+                            <Select w={`auto`} onChange={(ev) => setSortBy(ev.target.value)} placeholder='Sort By' background="white" icon={<AiFillCaretDown fontSize="14px" />} size="sm" defaultValue={sortBy}>
                                 {
                                     data?.result?.tracking_page?.sort_by ?
                                         data.result.tracking_page.sort_by.filter(({ hidden }: { hidden: Boolean}) => !hidden).map((
@@ -125,10 +125,10 @@ export default function FilterBar({ filters, setFilters }: Props) {
                             </Select>
                         </Flex>
 
-                        <Flex align="flex-start" flexDir="column">
-                            <Text mb={2} as="p" fontSize="sm">Filter by: {filterBy.map((key: string, i: number) => <Tag mr={2} key={i}>{data?.result?.tracking_page?.filters?.find((filter: {key: string, display: string}) => filter.key === key).display}</Tag>)}</Text>
+                        <Flex align="center" gap={2} mb={4}>
+                            <Text as="p" fontSize="sm">Filter by: {filterBy.map((key: string, i: number) => <Tag mr={2} key={i}>{data?.result?.tracking_page?.status_filters?.find((filter: {key: string, display: string}) => filter.key === key).display}</Tag>)}</Text>
                             <Menu autoSelect={false} closeOnSelect={false}>
-                                <MenuButton mb={4} background="white" fontSize="sm">
+                                <MenuButton background="white" fontSize="sm">
                                     <Flex align="center" justifyContent="space-between" fontWeight="normal" className={styles.filterByButton}>
                                         {!!filterBy.length ? `${filterBy.length} Selected` : <Text as="span">Select filters</Text> }
                                         <AiFillCaretDown fontSize="14px" />
@@ -136,8 +136,8 @@ export default function FilterBar({ filters, setFilters }: Props) {
                                 </MenuButton>
                                 <MenuList>
                                     {
-                                        data?.result?.tracking_page?.filters ?
-                                            data.result.tracking_page.filters.filter(({ hidden }: { hidden: Boolean}) => !hidden).map((
+                                        data?.result?.tracking_page?.status_filters ?
+                                            data.result.tracking_page.status_filters.filter(({ hidden }: { hidden: Boolean}) => !hidden).map((
                                                 { key, display }: { key: string, display: string }) =>
                                                 <MenuItem key={key}>
                                                     <Checkbox isChecked={filterBy.includes(key)} onChange={($event) => onCheckboxChange($event, key)}>{display}</Checkbox>
@@ -155,8 +155,8 @@ export default function FilterBar({ filters, setFilters }: Props) {
                                     extendedMetaData.result?.extended_meta?.group_search_criteria.filter(({ hidden }: { hidden: Boolean}) => !hidden).map((props: any) => {return {...props, _key: props.key}}).map(
                                         (props: CustomFieldProps) => {
                                             return (
-                                                <Flex align="flex-start" flexDir="column" key={props._key}>
-                                                    <Text mb={2} as="p" fontSize="sm">{props.display_name}:</Text>
+                                                <Flex align="center" gap={2} mb={4} key={props._key}>
+                                                    <Text as="p" fontSize="sm">{props.display_name}:</Text>
                                                     <Field {...props} values={customFieldValues} setValues={setCustomFieldValues} />
                                                 </Flex>
                                             )
@@ -166,7 +166,7 @@ export default function FilterBar({ filters, setFilters }: Props) {
                                 : <></>
                         }
 
-                        <Flex align="center" flexDir="row">
+                        <Flex align="center" gap={2} mb={4}>
                             <Text as="p" fontSize="sm" mr={2}>Timeline: </Text>
                             <Menu autoSelect={false}>
                                 <MenuButton as={Button} px={3} rightIcon={<AiFillCaretDown />} w="8.5rem" h={`2rem`} p={2} fontSize="sm">
@@ -185,11 +185,11 @@ export default function FilterBar({ filters, setFilters }: Props) {
                                     ? (
                                         <>
                                             <Box ml={2}>
-                                                <Text as="span" mr={2}>From: </Text>
+                                                <Text as="span" mr={2} fontSize="sm">From: </Text>
                                                 <Input type="date" value={fromDate} onChange={(e) => setFromDate(e.target.value)} w="10rem" background="white" />
                                             </Box>
                                             <Box ml={2}>
-                                                <Text as="span" mr={2}>To: </Text>
+                                                <Text as="span" mr={2} fontSize="sm">To: </Text>
                                                 <Input type="date" value={toDate} onChange={(e) => setToDate(e.target.value)} w="10rem" background="white" />
                                             </Box>
                                         </>
