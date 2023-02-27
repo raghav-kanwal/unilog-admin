@@ -13,6 +13,12 @@ export default function MultiSelect({ _key, default_value, values, setValues }: 
     const [options, setOptions] = useState<string[]>(values.find(v => v.type === 'multi_select' && v._key === _key)?.value as string[] || []);
 
     useEffect(() => {
+        // ONLY FOR CASE WHEN FILTER IS RESET
+        const field = values.find(v => v.type === 'multi_select' && v._key === _key);
+        if(field?.value?.length === 0) setOptions([])
+    }, [values])
+
+    useEffect(() => {
         setValues((values) => {
             const field = values.find(v => v._key === _key);
             field ? field.value = options : values.push({ _key, type: 'multi_select', value: options});

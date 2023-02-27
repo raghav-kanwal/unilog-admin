@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { CustomFieldValues } from 'src/components/FilterBar/types';
 import { Duration } from './enums';
 import { resolveDuration } from './utils';
 
@@ -17,7 +18,7 @@ export function useDate(duration: Duration) {
   return { fromDate, toDate, setFromDate, setToDate };
 }
 
-export function useDeviations(sortBy: string, filterBy: string[], duration: Duration): number {
+export function useDeviations(sortBy: string, filterBy: string[], duration: Duration, customFieldValues: CustomFieldValues[]): number {
 
   const [deviations, setDeviations] = useState<number>(0);
 
@@ -27,8 +28,13 @@ export function useDeviations(sortBy: string, filterBy: string[], duration: Dura
     if(sortBy !== '') ++devs;
     if(filterBy.length !== 0) ++devs;
 
+    customFieldValues.forEach(customField => {
+      if(customField.type === 'multi_select' && customField.value?.length !== 0) ++devs;
+      else if(customField.type === 'text' && customField.value !== '') ++devs;
+    })
+
     setDeviations(devs);
-  }, [duration, sortBy, filterBy]);
+  }, [duration, sortBy, filterBy, customFieldValues]);
 
   return deviations;
 }

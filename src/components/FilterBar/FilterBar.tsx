@@ -26,7 +26,7 @@ export default function FilterBar({ filters, setFilters }: Props) {
 
     const [customFieldValues, setCustomFieldValues] = useState<CustomFieldValues[]>([]);
 
-    const deviations: number = useDeviations(sortBy, filterBy, duration);
+    const deviations: number = useDeviations(sortBy, filterBy, duration, customFieldValues);
 
     const { onOpen, isOpen, onClose } = useDisclosure();
 
@@ -80,6 +80,11 @@ export default function FilterBar({ filters, setFilters }: Props) {
         setSortBy('');
         setFilterBy([]);
         setDuration(Duration.LAST_WEEK);
+        setCustomFieldValues(prev => prev.map(v => {
+            if(v.type === 'multi_select') v.value = [];
+            else if(v.type === 'text') v.value = '';
+            return {...v};
+        }))
         onSearch();
     }
 
