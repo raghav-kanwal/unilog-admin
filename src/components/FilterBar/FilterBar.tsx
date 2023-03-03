@@ -99,7 +99,6 @@ export default function FilterBar({ filters, setFilters }: Props) {
             else if(v.type === 'text') v.value = '';
             return {...v};
         }))
-        onSearch();
     }
 
     return (
@@ -128,7 +127,7 @@ export default function FilterBar({ filters, setFilters }: Props) {
                     <DrawerBody>
                         { 
                             (deviations > 0) 
-                                ? <Button mb={2} colorScheme="teal" size="sm"><Text as="span" onClick={clearFilters}>Reset All</Text></Button> 
+                                ? <Button mb={2} colorScheme="teal" size="sm"><Text as="span" onClick={() => {onSearch(true); onClose();}}>Reset All</Text></Button> 
                                 : <></> 
                         }
                         <Flex align="center" gap={2} mb={4}>
