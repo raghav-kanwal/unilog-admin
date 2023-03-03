@@ -163,6 +163,10 @@ function createColumns(columnHelper: ColumnHelper<ShipmentListColumns>, callback
             cell: (info) => info.getValue(),
             header: 'Facility',
         }),
+        columnHelper.accessor('courierStatus', {
+            cell: (info) => info.getValue(),
+            header: 'Courier Status'
+        }),
         columnHelper.accessor('trackingStatus', {
             cell: (info) => info.getValue(),
             header: 'Tracking Status',
@@ -186,10 +190,6 @@ function createColumns(columnHelper: ColumnHelper<ShipmentListColumns>, callback
         columnHelper.accessor('attempts', {
             cell: (info) => <Text as="p" textAlign="right">{info.getValue()}</Text>,
             header: (info) => 'No. of Attempts',
-        }),
-        columnHelper.accessor('courierStatus', {
-            cell: (info) => info.getValue(),
-            header: 'Courier Status'
         }),
         columnHelper.display({
             id: "actions",
