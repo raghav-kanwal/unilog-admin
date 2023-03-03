@@ -88,13 +88,16 @@ export default function ShipmentList({ filters }: Props) {
                                             : flexRender(
                                                 header.column.columnDef.footer,
                                                 header.getContext()
-                                            )}
+                                                )}
                                     </th>
                                 ))}
                             </tr>
                         ))}
                     </tfoot>
                 </table>
+                        {
+                            table.getRowModel().rows.length === 0 ? <Center h={`500px`}><Text textAlign={`center`} fontSize="xs" color="gray.500">No records found.</Text></Center>: <></>
+                        }
             </div>
             <Drawer
                 isOpen={isOpen}
