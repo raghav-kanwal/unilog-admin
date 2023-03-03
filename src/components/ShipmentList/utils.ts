@@ -1,8 +1,10 @@
 export interface ShipmentListColumns {
   shippingProvider: { awb: string; courier: string };
-  saleOrder: string;
+  orderDetails: {
+    saleOrder: string, 
+    shippingPackage: string,
+  }
   customer: { name: string; phone: string };
-  shippingPackage: string;
   facility: string;
   trackingStatus: string;
   orderDate: string;
@@ -10,6 +12,7 @@ export interface ShipmentListColumns {
   expectedDeliveryDate: string;
   deliveryDate: string;
   attempts: number;
+  courierStatus: string;
 }
 
 export const parseDate = (date: string): string => {
@@ -34,12 +37,14 @@ export const mapData = (data: any): ShipmentListColumns[] => {
         awb: record.tracking_number,
         courier: record.shipping_source_code,
       },
-      saleOrder: record.order_number,
+      orderDetails: {
+        saleOrder: record.order_number,
+        shippingPackage: record.shipping_package_code
+      },
       customer: {
         name: record.customer_name,
         phone: record.customer_phone,
       },
-      shippingPackage: record.shipping_package_code,
       facility: record.facility_code,
       trackingStatus: record.current_wismo_display_status,
       orderDate: parseDate(record.order_datetime),
@@ -47,6 +52,7 @@ export const mapData = (data: any): ShipmentListColumns[] => {
       expectedDeliveryDate: parseDate(record.expected_delivered_datetime),
       deliveryDate: parseDate(record.delivered_datetime),
       attempts: +record.no_of_items,
+      courierStatus: record.courier_status || '-'
     });
   });
 

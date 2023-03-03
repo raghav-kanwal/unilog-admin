@@ -1,7 +1,7 @@
 import { fetchShipmentList } from "apis/post";
 import { useQuery } from "@tanstack/react-query"
 import { createColumnHelper, useReactTable, getCoreRowModel, flexRender, ColumnHelper, ColumnDef } from "@tanstack/react-table"
-import { mapData, ShipmentListColumns as ShipmentDetailsColumns } from "./utils"
+import { mapData, ShipmentListColumns } from "./utils"
 import { Button, Center, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Flex, Text, useDisclosure } from "@chakra-ui/react";
 import ShipmentDetails from "../ShipmentDetails/ShipmentDetails";
 import { useMemo, useState } from "react";
@@ -35,7 +35,7 @@ export default function ShipmentList({ filters }: Props) {
         onClose();
     }
 
-    const columnHelper = createColumnHelper<ShipmentDetailsColumns>();
+    const columnHelper = createColumnHelper<ShipmentListColumns>();
     const columns = useMemo(() => createColumns(columnHelper, showShipmentDetails), []);
 
     const table = useReactTable({
@@ -124,7 +124,7 @@ export default function ShipmentList({ filters }: Props) {
     )
 }
 
-function createColumns(columnHelper: ColumnHelper<ShipmentDetailsColumns>, callback: Function): ColumnDef<ShipmentDetailsColumns, any>[] {
+function createColumns(columnHelper: ColumnHelper<ShipmentListColumns>, callback: Function): ColumnDef<ShipmentListColumns, any>[] {
     return [
         columnHelper.accessor('shippingProvider', {
             cell: (info) => {
@@ -137,9 +137,16 @@ function createColumns(columnHelper: ColumnHelper<ShipmentDetailsColumns>, callb
             },
             header: 'Shipping Provider',
         }),
-        columnHelper.accessor('saleOrder', {
-            cell: (info) => info.getValue(),
-            header: 'Sale Order',
+        columnHelper.accessor('orderDetails', {
+            cell: (info) => {
+                return (
+                    <>
+                        <Text>SO: {info.getValue().saleOrder}</Text>
+                        <Text>SP: {info.getValue().shippingPackage}</Text>
+                    </>
+                )
+            },
+            header: 'Order Details'
         }),
         columnHelper.accessor('customer', {
             cell: (info) => {
@@ -151,10 +158,6 @@ function createColumns(columnHelper: ColumnHelper<ShipmentDetailsColumns>, callb
                 )
             },
             header: 'Customer',
-        }),
-        columnHelper.accessor('shippingPackage', {
-            cell: (info) => info.getValue(),
-            header: 'Shipping Package',
         }),
         columnHelper.accessor('facility', {
             cell: (info) => info.getValue(),
@@ -183,6 +186,10 @@ function createColumns(columnHelper: ColumnHelper<ShipmentDetailsColumns>, callb
         columnHelper.accessor('attempts', {
             cell: (info) => <Text as="p" textAlign="right">{info.getValue()}</Text>,
             header: (info) => 'No. of Attempts',
+        }),
+        columnHelper.accessor('courierStatus', {
+            cell: (info) => info.getValue(),
+            header: 'Courier Status'
         }),
         columnHelper.display({
             id: "actions",
