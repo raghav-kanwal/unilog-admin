@@ -10,6 +10,7 @@ import { useDate, useDeviations } from "src/shared/hooks";
 import styles from './filterBar.module.scss';
 import { CustomFieldProps, CustomFieldValues } from "./types";
 import Field from "../FormFields";
+import { resolveDuration } from "src/shared/utils";
 
 interface Props {
     filters: Filters;
@@ -55,15 +56,28 @@ export default function FilterBar({ filters, setFilters }: Props) {
         })
     }, [])
 
-    const onSearch = () => {
-        setFilters({
-            searchText: searchQuery,
-            from: fromDate,
-            to: toDate,
-            sortBy: sortBy,
-            filterBy: filterBy,
-            customFieldValues,
-        })
+    const onSearch = (wasReset = false) => {
+        if(wasReset) {
+            clearFilters()
+            const initDate = resolveDuration(Duration.LAST_WEEK, '', '')
+            setFilters({
+                searchText: searchQuery,
+                from: initDate.from,
+                to: initDate.to,
+                sortBy: '',
+                filterBy: [],
+                customFieldValues: [],
+            })
+        } else {
+            setFilters({
+                searchText: searchQuery,
+                from: fromDate,
+                to: toDate,
+                sortBy: sortBy,
+                filterBy: filterBy,
+                customFieldValues,
+            })
+        }
     }
 
     const onCheckboxChange = (ev: any, key: string) => {
@@ -91,7 +105,7 @@ export default function FilterBar({ filters, setFilters }: Props) {
     return (
         <>
             <Flex justifyContent="space-between" align="center">
-                <Input value={searchQuery} placeholder="Search AWB/Order/Phone/Facility/Courier" w={`40%`} bg={`#fff`} onChange={(e) => setSearchQuery(e.target.value)} onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => e.key === 'Enter' && onSearch()} />
+                <Input value={searchQuery} placeholder="Search AWB/Order/Phone/Facility/Courier" w={`40%`} bg={`#fff`} onChange={(e) => setSearchQuery(e.target.value)} onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => e.key === 'Enter' && onSearch(true)} />
                 <Flex gap={4}>
                     <Button colorScheme="teal" size="sm" onClick={onOpen}>
                         <Text as="span">Filter Records</Text>
@@ -102,7 +116,7 @@ export default function FilterBar({ filters, setFilters }: Props) {
                         }
                     </Button>
                     <DownloadCSV filters={filters} />
-                    <Button colorScheme="teal" size="sm" onClick={onSearch}>Search</Button>
+                    <Button colorScheme="teal" size="sm" onClick={() => onSearch()}>Search</Button>
                 </Flex>
             </Flex>
             <Drawer isOpen={isOpen} onClose={onClose} placement='right' size='xl'>
